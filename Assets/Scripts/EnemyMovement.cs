@@ -5,7 +5,7 @@ using DG.Tweening;
 
 public class EnemyMovement : MonoBehaviour
 {
-    [SerializeField] private Transform targetPosition; // Assign the destination in the Inspector
+    public Transform targetPosition; // Assign the destination in the Inspector
     [SerializeField] private float duration = 2f; // Time in seconds for the movement
     [SerializeField] private float detectionRadius = 3f; // Radius to check for the player
     [SerializeField] private float deviationAmount = 0.5f; // How much deviation from the straight line
