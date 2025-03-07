@@ -54,9 +54,10 @@ public class CardWrapper : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (!isDragged) {
             var target = new Vector2(targetPosition.x, targetPosition.y + targetVerticalDisplacement);
             if (isHovered && zoomConfig.overrideYPosition != -1) {
+                
                 target = new Vector2(target.x, zoomConfig.overrideYPosition);
             }
-
+            
             var distance = Vector2.Distance(rectTransform.position, target);
             var repositionSpeed = rectTransform.position.y > target.y || rectTransform.position.y < 0
                 ? animationSpeedConfig.releasePosition
