@@ -103,6 +103,28 @@ public class EnemyMovement : MonoBehaviour
             Mathf.Clamp(position.z, minBounds.z, maxBounds.z)
         );
     }
+    
+    // Time Dilation Card Integration
+    public void ApplySpeedEffect(float multiplier, float duration)
+    {
+        if (moveTween != null)
+        {
+            moveTween.timeScale = multiplier; // Adjust movement speed
+        }
+
+        StartCoroutine(RestoreSpeed(duration));
+    }
+
+    private IEnumerator RestoreSpeed(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (moveTween != null)
+        {
+            moveTween.timeScale = 1f; // Reset to normal speed
+        }
+    }
+
 
     private void OnDrawGizmosSelected()
     {
