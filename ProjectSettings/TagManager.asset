@@ -4,7 +4,13 @@
 TagManager:
   serializedVersion: 2
   tags:
+  - Sword
   - Enemy
+  - Ground
+  - Pickable
+  - Papaz
+  - Scientist
+  - Arrow
   layers:
   - Default
   - TransparentFX
@@ -12,7 +18,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - ArrowLayer
   - 
   - 
   - 
