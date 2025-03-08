@@ -15,15 +15,15 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private Vector3 minBounds = new Vector3(-5f, 0f, -5f); // Minimum boundary
     [SerializeField] private Vector3 maxBounds = new Vector3(5f, 0f, 5f);  // Maximum boundary
 
-    private Tween moveTween; // Store movement tween
-    private bool isPaused = false;
+    public Tween moveTween; // Store movement tween
+    public bool isPaused = false;
     private float fixedY; // Stores the Y position to keep it constant
     private bool hasShotArrow = false; // Prevents multiple arrow shots
     private bool isScientistShooting = false; // Prevents multiple scientist attacks
     private bool hasAttacked = false; // Prevents multiple sword attacks
     [SerializeField] private bool isArcher = false; // Is this enemy an archer?]
 
-    [SerializeField] private Animator animator; // Animator reference
+    [SerializeField] public Animator animator; // Animator reference
 
     private PapazArrowSpawner arrowSpawner; 
     private SwordAttack swordAttack; 
