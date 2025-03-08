@@ -23,7 +23,8 @@ public class KartMek : MonoBehaviour
     //LevelControl levelControl;
     [SerializeField] public List<Transform> Coordinates = new List<Transform>();
 
-    public GameObject arrow;
+    public GameObject scientist;
+    public GameObject priest;
     List<GameObject> cardObjectList = new List<GameObject>();
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
@@ -45,7 +46,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            //OnDestroy = (kart) => okSaptýr(kart.ad,true)
+            OnDestroy = (kart) => radyasyon(kart.ad,true)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -244,10 +245,10 @@ public class KartMek : MonoBehaviour
             {
                 kart.aktiflik = false;
             }
-            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            scientist.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
             Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
-            StartCoroutine(SetSaptirForSeconds(saptir, 0.8f));
+            StartCoroutine(SetForSeconds(saptir, 0.8f));
             
         }
 
@@ -255,15 +256,38 @@ public class KartMek : MonoBehaviour
         
         
     }
+    void radyasyon(string name, bool saptir)
+    {
+        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+        if (kart != null)
+        {
+            Debug.Log(kart.ad + " seçildi");
+            //CoinUpdate(kart);
+            kart.kalanAdet--;
+            if (kart.kalanAdet == 0)
+            {
+                kart.aktiflik = false;
+            }
+            priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
+            Debug.Log(saptir);
+            // Start the coroutine to handle the saptir bool
+            StartCoroutine(SetForSeconds(saptir, 0.8f));
 
-    private IEnumerator SetSaptirForSeconds(bool saptir, float duration)
+        }
+
+        Debug.Log(kart.ad + " seçildi");
+
+
+    }
+    private IEnumerator SetForSeconds(bool saptir, float duration)
     {
         
 
         yield return new WaitForSeconds(duration);
 
         saptir = false;
-            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+        scientist.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+        priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
         Debug.Log("saptir set to false");
     }
 

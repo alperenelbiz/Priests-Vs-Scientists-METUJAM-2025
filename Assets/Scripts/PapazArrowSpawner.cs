@@ -8,7 +8,7 @@ public class PapazArrowSpawner : MonoBehaviour
     public float fireRate = 2f;
     public float shootForce = 10f;
 
-    private bool isMarieCurieModeActive = false;
+    public bool isMarieCurieModeActive = false;
     public HealthSystem healthSystem; // Saðlýk sistemine eriþim
     public RadioationEffect radiationEffect; // Parçacýk efekti
 
