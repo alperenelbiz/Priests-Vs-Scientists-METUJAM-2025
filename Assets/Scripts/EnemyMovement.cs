@@ -61,11 +61,19 @@ public class EnemyMovement : MonoBehaviour
 
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
             .SetEase(Ease.InOutQuad)
-            //.OnStart(() => Debug.Log("📍 " + gameObject.name + " started moving"))
-            //.OnUpdate(() => Debug.Log("📍 " + gameObject.name + " position: " + transform.position))
+            .OnUpdate(() =>
+            {
+                // Make the character look at the target but only rotate on Y-axis
+                Vector3 direction = (targetPosition.position - transform.position).normalized;
+                direction.y = 0f; // Keep Y rotation unchanged
+                if (direction != Vector3.zero)
+                {
+                    Quaternion targetRotation = Quaternion.LookRotation(direction);
+                    transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f);
+                }
+            })
             .OnComplete(() =>
             {
-                //Debug.Log("✅ " + gameObject.name + " reached target");
                 moveTween = null;
                 animator.SetBool("isWalking", false);
                 TryShootArrow();
@@ -84,11 +92,11 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (var col in colliders)
         {
-            //Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
 
             if (col.CompareTag(enemyTag))
             {
-                //Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
                 enemyNearby = true;
                 break;
             }
@@ -104,7 +112,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (!enemyNearby && isPaused)
         {
-            //Debug.Log($"▶ {gameObject.name} resuming movement");
+            Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
             animator.SetBool("isWalking", true);
