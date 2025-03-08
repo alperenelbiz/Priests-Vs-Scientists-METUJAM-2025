@@ -1,4 +1,4 @@
-using System;
+ï»¿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,7 +35,7 @@ public class KartMek : MonoBehaviour
         eventSystem = GameObject.Find("Event System");
         //levelControl = eventSystem.GetComponent<LevelControl>();
 
-        Kart radyasyonKartýOluþtur = new()
+        Kart radyasyonKartÄ±OluÅŸtur = new()
         {
             ad = "RADYASYON",
             aciklama = "Radyasyon yay",
@@ -51,11 +51,11 @@ public class KartMek : MonoBehaviour
 
         };
 
-        kartListesi.Add(radyasyonKartýOluþtur);
-        Kart okSaptýrKartýOluþtur = new()
+        kartListesi.Add(radyasyonKartÄ±OluÅŸtur);
+        Kart okSaptÄ±rKartÄ±OluÅŸtur = new()
         {
-            ad = "Ok saptýr",
-            aciklama = "Okun yönünü saptýr",
+            ad = "Ok saptÄ±r",
+            aciklama = "Okun yÃ¶nÃ¼nÃ¼ saptÄ±r",
             aktiflik = true,
             kalanAdet = 3,
             olasilik = 0.5f,
@@ -63,13 +63,13 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => okSaptýr(kart.ad, true)
+            OnDestroy = (kart) => okSaptÄ±r(kart.ad, true)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(okSaptýrKartýOluþtur);
-        Kart karaDelikOluþtur = new()
+        kartListesi.Add(okSaptÄ±rKartÄ±OluÅŸtur);
+        Kart karaDelikOluÅŸtur = new()
         {
             ad = "Kara delik",
             aciklama = "blackniga",
@@ -85,29 +85,29 @@ public class KartMek : MonoBehaviour
 
         };
 
-        kartListesi.Add(karaDelikOluþtur);
+        kartListesi.Add(karaDelikOluÅŸtur);
 
-        Kart hýzlandýrmaKartýOluþtur = new()
+        Kart hÄ±zlandÄ±rmaKartÄ±OluÅŸtur = new()
         {
-            ad = "Zamaný Hýzlandýr",
-            aciklama = "Ben hýzým",
+            ad = "ZamanÄ± HÄ±zlandÄ±r",
+            aciklama = "Ben hÄ±zÄ±m",
             aktiflik = true,
             kalanAdet = 3,
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f, "Papaz")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(hýzlandýrmaKartýOluþtur);
+        kartListesi.Add(hÄ±zlandÄ±rmaKartÄ±OluÅŸtur);
 
-        Kart yavaþlatmaKartýOluþtur = new()
+        Kart yavaÅŸlatmaKartÄ±OluÅŸtur = new()
         {
-            ad = "Yavaþlat",
-            aciklama = "Ben hýz deðilim",
+            ad = "YavaÅŸlat",
+            aciklama = "Ben hÄ±z deÄŸilim",
             aktiflik = true,
             kalanAdet = 3,
             olasilik = 0.5f,
@@ -115,13 +115,46 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f)
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(yavaþlatmaKartýOluþtur);
+        kartListesi.Add(yavaÅŸlatmaKartÄ±OluÅŸtur);
+        Kart okYavaÅŸlatmaKartÄ±OluÅŸtur = new()
+        {
+            ad = "YavaÅŸlat",
+            aciklama = "Ben hÄ±z deÄŸilim",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
 
+            cost = 2,
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+
+        kartListesi.Add(okYavaÅŸlatmaKartÄ±OluÅŸtur);
+        Kart okHÄ±zlandÄ±rmalatmaKartÄ±OluÅŸtur = new()
+        {
+            ad = "YavaÅŸlat",
+            aciklama = "Ben hÄ±z deÄŸilim",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+
+            cost = 2,
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+
+        kartListesi.Add(okYavaÅŸlatmaKartÄ±OluÅŸtur);
 
     }
     private void Start()
@@ -137,11 +170,11 @@ public class KartMek : MonoBehaviour
         }
         aktifKartlar.Clear();
 
-        List<int> kullanilanIndexler = new List<int>(); // Kullanýlan kart indekslerini tutmak için liste
+        List<int> kullanilanIndexler = new List<int>(); // KullanÄ±lan kart indekslerini tutmak iÃ§in liste
 
         for (int i = 0; i < Coordinates.Count; i++)
         {
-            // Kartý Instantiate et ve gerekli özellikleri ayarla
+            // KartÄ± Instantiate et ve gerekli Ã¶zellikleri ayarla
             Kart secilenKart = SecilenKartiGetir(kullanilanIndexler);
             GameObject cardObject = Instantiate(cardBack, Coordinates[i].position, Quaternion.identity, gameObject.transform);
             // cardObject.transform.SetParent(Coordinates[i]);
@@ -153,30 +186,30 @@ public class KartMek : MonoBehaviour
 
             if (secilenKart == null)
             {
-                continue; // Diðer Kartlara geç
+                continue; // DiÄŸer Kartlara geÃ§
             }
             TextMeshProUGUI[] textBox = cardObject.GetComponentsInChildren<TextMeshProUGUI>();
             if (textBox.Length >= 2)
             {
-                textBox[0].text = secilenKart.ad; // Ýlk(Title) TextBox'ý doldur
-                textBox[1].text = secilenKart.aciklama; // Ýkinci(Description) TextBox'ý doldur
-                textBox[2].text = secilenKart.cost.ToString(); // Üçücüncü(Cost) TextBox'ý doldur
+                textBox[0].text = secilenKart.ad; // Ä°lk(Title) TextBox'Ä± doldur
+                textBox[1].text = secilenKart.aciklama; // Ä°kinci(Description) TextBox'Ä± doldur
+                textBox[2].text = secilenKart.cost.ToString(); // ÃœÃ§Ã¼cÃ¼ncÃ¼(Cost) TextBox'Ä± doldur
             }
             else
             {
-                Debug.Log("TextBoxlar bulunamadý!");
+                Debug.Log("TextBoxlar bulunamadÄ±!");
             }
 
             Image[] image = cardObject.GetComponentsInChildren<Image>();
             if (image.Length >= 2)
             {
-                image[1].sprite = secilenKart.gorsel; // Ýlk(Title) TextBox'ý doldur
+                image[1].sprite = secilenKart.gorsel; // Ä°lk(Title) TextBox'Ä± doldur
             }
             else
             {
-                Debug.Log("TextBoxlar bulunamadý!");
+                Debug.Log("TextBoxlar bulunamadÄ±!");
             }
-            // Seçilen kartý aktif kartlara ekle
+            // SeÃ§ilen kartÄ± aktif kartlara ekle
             aktifKartlar.Add(secilenKart);
             kullanilanIndexler.Add(secilenKart.indeks);
 
@@ -196,16 +229,16 @@ public class KartMek : MonoBehaviour
 
         if (kullanilabilirKartlar.Count == 0)
         {
-            return null; // Kullanýlabilir kart yoksa null döndür
+            return null; // KullanÄ±labilir kart yoksa null dÃ¶ndÃ¼r
         }
-        // Kartlarýn olasýlýklarýný hesapla
+        // KartlarÄ±n olasÄ±lÄ±klarÄ±nÄ± hesapla
         float toplamOlasilik = 0f;
         foreach (Kart kart in kullanilabilirKartlar)
         {
             toplamOlasilik += kart.olasilik;
         }
 
-        // Rastgele bir olasýlýk deðeri seç
+        // Rastgele bir olasÄ±lÄ±k deÄŸeri seÃ§
         float rastgeleOlasilik = Random.Range(0f, toplamOlasilik);
 
         float toplam = 0f;
@@ -214,7 +247,7 @@ public class KartMek : MonoBehaviour
             toplam += kart.olasilik;
             if (rastgeleOlasilik <= toplam)
             {
-                // Kartýn kalan adetini kontrol et
+                // KartÄ±n kalan adetini kontrol et
 
                 if (kart.kalanAdet == 0)
                 {
@@ -226,7 +259,7 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    void ZamanDelay(string name, float multiplier, float duration) // asker özellikleri arttýr!!!!
+    void ZamanDelay(string name, float multiplier, float duration,string targetTag) // asker Ã¶zellikleri arttÄ±r!!!!
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
@@ -241,21 +274,26 @@ public class KartMek : MonoBehaviour
 
             foreach (var enemy in enemies)
             {
-                enemy.ApplySpeedEffect(multiplier, duration);
+                if (enemy.CompareTag(targetTag))
+                {
+                    //Debug.Log($"âœ… Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
+                    enemy.ApplySpeedEffect(multiplier, duration);
+                }
+
             }
 
         }
 
-        Debug.Log(kart.ad + " seçildi");
+        Debug.Log(kart.ad + " seÃ§ildi");
 
     }
 
-    void okSaptýr(string name, bool saptir)
+    void okSaptÄ±r(string name, bool saptir)
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
+            Debug.Log(kart.ad + " seÃ§ildi");
             //CoinUpdate(kart);
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
@@ -269,7 +307,7 @@ public class KartMek : MonoBehaviour
 
         }
 
-        Debug.Log(kart.ad + " seçildi");
+        Debug.Log(kart.ad + " seÃ§ildi");
 
 
     }
@@ -278,7 +316,7 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
+            Debug.Log(kart.ad + " seÃ§ildi");
             //CoinUpdate(kart);
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
@@ -294,7 +332,7 @@ public class KartMek : MonoBehaviour
 
         }
 
-        Debug.Log(kart.ad + " seçildi");
+        Debug.Log(kart.ad + " seÃ§ildi");
 
 
     }
@@ -303,7 +341,7 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
+            Debug.Log(kart.ad + " seÃ§ildi");
             //CoinUpdate(kart);
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
@@ -317,7 +355,7 @@ public class KartMek : MonoBehaviour
             priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
         }
 
-        Debug.Log(kart.ad + " seçildi");
+        Debug.Log(kart.ad + " seÃ§ildi");
 
 
     }
@@ -332,7 +370,7 @@ public class KartMek : MonoBehaviour
         {
             priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
         }
-        else if (kart.ad == "Ok saptýr")
+        else if (kart.ad == "Ok saptÄ±r")
             scientist.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
         else
             priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
