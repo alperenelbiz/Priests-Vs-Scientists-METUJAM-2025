@@ -29,7 +29,7 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
         EnemyMovement enemyController = enemy.GetComponent<EnemyMovement>();
-        enemyController.target = targetPoint;
+        enemyController.targetPosition = targetPoint;
     }
 
     void OnDrawGizmos()
