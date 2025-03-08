@@ -154,6 +154,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!224 &22936175 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 3604219231421652343, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+  m_PrefabInstance: {fileID: 4784234935679377801}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &226769110 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 9007155347058602762, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
@@ -440,8 +445,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardBack: {fileID: 5292092366202001119, guid: 9fd54d24bcb5a4042b1b6bb6d3211c4a, type: 3}
   Coordinates:
-  - {fileID: 4411604}
+  - {fileID: 1612582837}
   - {fileID: 1947204789}
+  - {fileID: 1359228002}
+  - {fileID: 22936175}
+  arrow: {fileID: 6853439453261350569, guid: eb23ec9117ef7264a8940559aaabe577, type: 3}
+--- !u!224 &1359228002 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 7576389827827184262, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+  m_PrefabInstance: {fileID: 4784234935679377801}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1364501462
 GameObject:
   m_ObjectHideFlags: 0
@@ -487,6 +500,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   container: {fileID: 1247035314}
+--- !u!224 &1612582837 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 6815765367571450856, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+  m_PrefabInstance: {fileID: 4784234935679377801}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1704544136
 GameObject:
   m_ObjectHideFlags: 0
