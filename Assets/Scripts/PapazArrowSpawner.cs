@@ -19,8 +19,6 @@ public class PapazArrowSpawner : MonoBehaviour
     public float pushForce = 10f;
     private bool isHawkingModeActive = false;
 
-
-
     void Start()
     {
         StartCoroutine(FireArrows());
