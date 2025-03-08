@@ -20,15 +20,19 @@ public class EnemyMovement : MonoBehaviour
     private float fixedY; // Stores the Y position to keep it constant
     private bool hasShotArrow = false; // Prevents multiple arrow shots
     private bool isScientistShooting = false; // Prevents multiple scientist attacks
+    private bool hasAttacked = false; // Prevents multiple sword attacks
+    [SerializeField] private bool isArcher = false; // Is this enemy an archer?]
 
     [SerializeField] private Animator animator; // Animator reference
 
     private PapazArrowSpawner arrowSpawner; 
+    private SwordAttack swordAttack; 
 
     void Start()
     {
         fixedY = transform.position.y;
         arrowSpawner = GetComponent<PapazArrowSpawner>();
+        swordAttack = GetComponent<SwordAttack>();
         MoveToTarget();
     }
 
@@ -48,6 +52,9 @@ public class EnemyMovement : MonoBehaviour
         //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
         
         animator.SetBool("isWalking", true);
+        animator.SetBool("isAttacking", false);
+        hasAttacked = false;
+        //animator.SetBool("isWalking", true);
 
         // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
@@ -76,8 +83,10 @@ public class EnemyMovement : MonoBehaviour
             {
                 moveTween = null;
                 animator.SetBool("isWalking", false);
+                animator.SetBool("isAttacking", true);
                 TryShootArrow();
                 TriggerScientistAttack();
+                PerformSwordAttack();
             });
         hasShotArrow = false;
         isScientistShooting = false;
@@ -107,8 +116,17 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Pause();
             isPaused = true;
             animator.SetBool("isWalking", false);
-            TryShootArrow();
-            TriggerScientistAttack();
+            animator.SetBool("isAttacking", true);
+
+            if (isArcher)
+            {
+                TryShootArrow();
+                TriggerScientistAttack();
+            }
+            else
+            {
+                PerformSwordAttack();
+            }
         }
         else if (!enemyNearby && isPaused)
         {
@@ -116,8 +134,11 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Play();
             isPaused = false;
             animator.SetBool("isWalking", true);
+            animator.SetBool("isAttacking", false);
             hasShotArrow = false;
             isScientistShooting = false;
+            hasAttacked = false;
+            StopAttacking();
         }
     }
 
@@ -132,10 +153,50 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Kill();
             moveTween = null;
             animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", true);
             TryShootArrow();
             TriggerScientistAttack();
-
+            PerformSwordAttack();
         }
+    }
+    
+    void PerformSwordAttack()
+    {
+        if (swordAttack != null && !hasAttacked)  // Only start attack loop if not already attacking
+        {
+            Debug.Log($"⚔ {gameObject.name} starts attacking!");
+
+            hasAttacked = true; // Enemy is now in attack mode
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", true);
+
+            StartCoroutine(AttackLoop()); // Start attacking repeatedly
+        }
+    }
+    
+    private IEnumerator AttackLoop()
+    {
+        while (hasAttacked) // Keep attacking as long as they are in attack mode
+        {
+            Debug.Log($"⚔ {gameObject.name} attacks!");
+            swordAttack.DealDamage(); // Apply damage
+
+            yield return new WaitForSeconds(2f); // Delay between attacks (adjust if needed)
+        }
+    }
+
+    void StopAttacking()
+    {
+        hasAttacked = false;
+        animator.SetBool("isAttacking", false);
+        StopCoroutine(AttackLoop());
+    }
+
+    private IEnumerator ResetAttackCooldown()
+    {
+        yield return new WaitForSeconds(0.5f); // Cooldown for next attack
+        hasAttacked = false;
+        animator.SetBool("isAttacking", false);
     }
     
     void TriggerScientistAttack()
