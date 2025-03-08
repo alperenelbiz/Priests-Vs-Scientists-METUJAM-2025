@@ -6,10 +6,10 @@ public class Arrow : MonoBehaviour
     public float damage = 20f; 
     void Start()
     {
-        // "ArrowLayer" numarasýný al
+        // "ArrowLayer" numarasï¿½nï¿½ al
         int arrowLayer = LayerMask.NameToLayer("ArrowLayer");
 
-        // "ArrowLayer" ile "ArrowLayer" arasýndaki çarpýþmayý kapat
+        // "ArrowLayer" ile "ArrowLayer" arasï¿½ndaki ï¿½arpï¿½ï¿½mayï¿½ kapat
         Physics.IgnoreLayerCollision(arrowLayer, arrowLayer, true);
     }
     private GameObject shooter; // Oku atan nesne
@@ -21,7 +21,7 @@ public class Arrow : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        // Eðer ok kendisini atan nesneye çarptýysa, hiçbir þey yapma
+        // Eï¿½er ok kendisini atan nesneye ï¿½arptï¿½ysa, hiï¿½bir ï¿½ey yapma
         if (other.gameObject == shooter)
         {
             return;
@@ -31,13 +31,13 @@ public class Arrow : MonoBehaviour
             return;
         }
 
-        // Eðer bir Scientist veya Papaz'a çarptýysa, oku yok et
+        // Eï¿½er bir Scientist veya Papaz'a ï¿½arptï¿½ysa, oku yok et
         if (other.CompareTag("Scientist") || other.CompareTag("Papaz"))
         {
             HealthSystem health = other.GetComponent<HealthSystem>();
             if (health != null)
             {
-                health.TakeDamage(damage); // Canýný düþür
+                health.TakeDamage(damage); // Canï¿½nï¿½ dï¿½ï¿½ï¿½r
             }
 
             Destroy(gameObject); // Ok yok olsun

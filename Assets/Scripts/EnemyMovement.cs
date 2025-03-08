@@ -40,11 +40,11 @@ public class EnemyMovement : MonoBehaviour
     {
         if (targetPosition == null)
         {
-            Debug.LogError(gameObject.name + ": Target position is missing!");
+            //Debug.LogError(gameObject.name + ": Target position is missing!");
             return;
         }
 
-        Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
+        //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
 
         // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
@@ -58,13 +58,14 @@ public class EnemyMovement : MonoBehaviour
 
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
             .SetEase(Ease.InOutQuad)
-            .OnStart(() => Debug.Log("📍 " + gameObject.name + " started moving"))
-            .OnUpdate(() => Debug.Log("📍 " + gameObject.name + " position: " + transform.position))
+            //.OnStart(() => Debug.Log("📍 " + gameObject.name + " started moving"))
+            //.OnUpdate(() => Debug.Log("📍 " + gameObject.name + " position: " + transform.position))
             .OnComplete(() =>
             {
-                Debug.Log("✅ " + gameObject.name + " reached target");
+                //Debug.Log("✅ " + gameObject.name + " reached target");
                 moveTween = null;
                 TryShootArrow();
+                TriggerScientistAttack();
             });
         hasShotArrow = false;
         isScientistShooting = false;
@@ -79,11 +80,11 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (var col in colliders)
         {
-            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+            //Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
 
             if (col.CompareTag(enemyTag))
             {
-                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+                //Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
                 enemyNearby = true;
                 break;
             }
@@ -94,10 +95,11 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Pause();
             isPaused = true;
             TryShootArrow();
+            TriggerScientistAttack();
         }
         else if (!enemyNearby && isPaused)
         {
-            Debug.Log($"▶ {gameObject.name} resuming movement");
+            //Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
             hasShotArrow = false;
@@ -112,7 +114,7 @@ public class EnemyMovement : MonoBehaviour
         float distance = Vector3.Distance(transform.position, targetPosition.position);
         if (distance <= stopThreshold)
         {
-            Debug.Log($"🛑 {gameObject.name} reached its target, stopping.");
+            //Debug.Log($"🛑 {gameObject.name} reached its target, stopping.");
             moveTween.Kill();
             moveTween = null;
             TryShootArrow();
@@ -157,7 +159,7 @@ public class EnemyMovement : MonoBehaviour
             if (nearestTarget != null)
             {
                 arrowSpawner.ShootArrow(nearestTarget); // Shoot arrow at nearest scientist
-                Debug.Log($"🏹 {gameObject.name} shot an arrow at {nearestTarget.name}");
+                //Debug.Log($"🏹 {gameObject.name} shot an arrow at {nearestTarget.name}");
                 hasShotArrow = true; // Prevent multiple shots while stopped
             }
         }
