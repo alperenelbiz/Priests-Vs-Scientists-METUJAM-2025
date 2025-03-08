@@ -10,13 +10,13 @@ public class PapazArrowSpawner : MonoBehaviour
     public float shootForce = 10f;
     public float minDistanceToAttack =7f;
 
-    private bool isMarieCurieModeActive = false;
+    public bool isMarieCurieModeActive = false;
     public HealthSystem healthSystem; // Saðlýk sistemine eriþim
     public RadioationEffect radiationEffect; // Parçacýk efekti
 
     public float blackHoleDuration = 5f;
     public float pushForce = 10f;
-    private bool isHawkingModeActive = false;
+    public bool isHawkingModeActive = false;
 
 
 
@@ -115,7 +115,7 @@ public class PapazArrowSpawner : MonoBehaviour
         // Son hï¿½z vektï¿½rï¿½nï¿½ belirle
         return velocityXZ + Vector3.up * initialVelocityY;
     }
-    void ActivateMarieCurieMode()
+    public void ActivateMarieCurieMode()
     {
         isMarieCurieModeActive = true;
         radiationEffect.ActivateRadiation(); // Parçacýklarý baþlat
@@ -141,7 +141,7 @@ public class PapazArrowSpawner : MonoBehaviour
         radiationEffect.DeactivateRadiation(); // Parçacýklarý durdur
     }
 
-    void ActivateHawkingMode()
+    public void ActivateHawkingMode()
     {
         Transform nearestScientist = FindNearestTarget("Scientist");
         if (nearestScientist == null) return;

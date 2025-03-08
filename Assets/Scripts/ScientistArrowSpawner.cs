@@ -6,7 +6,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     public GameObject arrowPrefab;
     public float fireRate = 2f;
     public float shootForce = 10f;
-    private bool isSpaceMode = false;
+    public bool isSpaceMode = false;
     public float minDistancetoAttack = 7f;
     private void Update()
     {
