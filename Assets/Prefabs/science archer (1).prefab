@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 8295635621834874818}
   m_Layer: 0
   m_Name: science archer (1)
-  m_TagString: Untagged
+  m_TagString: Scientist
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -55,10 +55,11 @@ MonoBehaviour:
   detectionRadius: 3
   enemyTag: Papaz
   stopThreshold: 0.5
-  minBounds: {x: 29.2, y: 9.44, z: -25.3}
-  maxBounds: {x: 33.9, y: 9.44, z: -22.2}
-  isArcher: 0
-  animator: {fileID: 0}
+  minBounds: {x: 6.07, y: 0, z: -40.3}
+  maxBounds: {x: -6.06, y: 0, z: -47}
+  isPaused: 0
+  isArcher: 1
+  animator: {fileID: 8957625555123118283}
 --- !u!114 &3880717336598426458
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -88,7 +89,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75d7c20a82972d489cdba151f15feec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100
+  maxHealth: 10000
 --- !u!95 &8957625555123118283
 Animator:
   serializedVersion: 5
@@ -125,7 +126,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -159,7 +160,7 @@ Transform:
   m_GameObject: {fileID: 1059024349242286709}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0.000000015454312, z: 0.000000015454312, w: 0.7071068}
-  m_LocalPosition: {x: -1.1992815, y: 0.7550701, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 50, y: 100, z: 100}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -883,7 +884,7 @@ Transform:
   m_GameObject: {fileID: 6503237654246609611}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0.000000015454312, z: 0.000000015454312, w: 0.7071068}
-  m_LocalPosition: {x: -1.1947768, y: 0.032246947, z: 0.037816867}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 59.93487, y: 59.93487, z: 59.93487}
   m_ConstrainProportionsScale: 0
   m_Children:
