@@ -123,7 +123,7 @@ public class KartMek : MonoBehaviour
         kartListesi.Add(yavaşlatmaKartıOluştur);
         Kart okYavaşlatmaKartıOluştur = new()
         {
-            ad = "Yavaşlat",
+            ad = "Ok yavaslat",
             aciklama = "Ben hız değilim",
             aktiflik = true,
             kalanAdet = 3,
@@ -132,15 +132,15 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            OnDestroy = (kart) => OkDelay(kart.ad, 2.0f, 5.0f, "Scientist")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
         kartListesi.Add(okYavaşlatmaKartıOluştur);
-        Kart okHızlandırmalatmaKartıOluştur = new()
+        Kart okHızlandırmaKartıOluştur = new()
         {
-            ad = "Yavaşlat",
+            ad = " Ok Hizlandir",
             aciklama = "Ben hız değilim",
             aktiflik = true,
             kalanAdet = 3,
@@ -149,12 +149,12 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            OnDestroy = (kart) => OkDelay(kart.ad, 0.5f, 5.0f, "Papaz")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(okYavaşlatmaKartıOluştur);
+        kartListesi.Add(okHızlandırmaKartıOluştur);
 
     }
     private void Start()
@@ -280,6 +280,41 @@ public class KartMek : MonoBehaviour
                     enemy.ApplySpeedEffect(multiplier, duration);
                 }
 
+            }
+
+        }
+
+        Debug.Log(kart.ad + " seçildi");
+
+    }
+    void OkDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
+    {
+        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+        if (kart != null)
+        {
+            //CoinUpdate(kart);
+            kart.kalanAdet--;
+            if (kart.kalanAdet == 0)
+            {
+                kart.aktiflik = false;
+            }
+            if (targetTag == "Scientist")
+            {
+                Debug.Log("Applying arrow speed effect to Scientists");
+                ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
+                foreach (var spawner in scientistSpawners)
+                {
+                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
+                }
+            }
+            else if (targetTag == "Papaz")
+            {
+                Debug.Log("Applying arrow speed effect to Papaz");
+                PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
+                foreach (var spawner in papazSpawners)
+                {
+                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
+                }
             }
 
         }
