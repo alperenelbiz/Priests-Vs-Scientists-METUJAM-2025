@@ -295,7 +295,27 @@ public class EnemyMovement : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
+        // Detection Radius
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+        // Movement Boundaries
+        Gizmos.color = Color.red;
+        Vector3 bottomLeft = new Vector3(minBounds.x, transform.position.y, minBounds.z);
+        Vector3 bottomRight = new Vector3(maxBounds.x, transform.position.y, minBounds.z);
+        Vector3 topLeft = new Vector3(minBounds.x, transform.position.y, maxBounds.z);
+        Vector3 topRight = new Vector3(maxBounds.x, transform.position.y, maxBounds.z);
+
+        Gizmos.DrawLine(bottomLeft, bottomRight);
+        Gizmos.DrawLine(bottomRight, topRight);
+        Gizmos.DrawLine(topRight, topLeft);
+        Gizmos.DrawLine(topLeft, bottomLeft);
+
+        // Boundary Corners for Better Visibility
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(bottomLeft, 0.2f);
+        Gizmos.DrawSphere(bottomRight, 0.2f);
+        Gizmos.DrawSphere(topLeft, 0.2f);
+        Gizmos.DrawSphere(topRight, 0.2f);
     }
 }
