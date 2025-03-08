@@ -10,10 +10,15 @@ public class CameraFollow : MonoBehaviour
 
     void Start()
     {
+        
+
         transform.position = player.position + offset;
         transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
     }
-
+    private void Update()
+    {
+      
+    }
     void FixedUpdate()
     {
         Vector3 desiredPosition = player.position + offset;

@@ -22,8 +22,8 @@ public class KartMek : MonoBehaviour
     private List<Kart> aktifKartlar = new List<Kart>();
     //LevelControl levelControl;
     [SerializeField] public List<Transform> Coordinates = new List<Transform>();
-   
 
+    public GameObject arrow;
     List<GameObject> cardObjectList = new List<GameObject>();
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
@@ -45,7 +45,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            
+            //OnDestroy = (kart) => okSaptýr(kart.ad,true)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -62,7 +62,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-
+            OnDestroy = (kart) => okSaptýr(kart.ad, true)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -97,7 +97,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -229,7 +229,42 @@ public class KartMek : MonoBehaviour
         }
         
         Debug.Log(kart.ad + " seçildi");
+       
     }
 
-    
+    void okSaptýr(string name,bool saptir)
+    {
+        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+        if (kart != null)
+        {
+            Debug.Log(kart.ad + " seçildi");
+            //CoinUpdate(kart);
+            kart.kalanAdet--;
+            if (kart.kalanAdet == 0)
+            {
+                kart.aktiflik = false;
+            }
+            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            Debug.Log(saptir);
+            // Start the coroutine to handle the saptir bool
+            StartCoroutine(SetSaptirForSeconds(saptir, 0.8f));
+            
+        }
+
+        Debug.Log(kart.ad + " seçildi");
+        
+        
+    }
+
+    private IEnumerator SetSaptirForSeconds(bool saptir, float duration)
+    {
+        
+
+        yield return new WaitForSeconds(duration);
+
+        saptir = false;
+            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+        Debug.Log("saptir set to false");
+    }
+
 }

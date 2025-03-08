@@ -85,8 +85,7 @@ public class PapazArrowSpawner : MonoBehaviour
                 Vector3 launchVelocity = CalculateLaunchVelocity(target);
                 rb.velocity = launchVelocity;
                 rb.useGravity = true;
-                Debug.Log("E�imli ok f�rlat�ld�! Hedef: " + target.name + " | H�z: " + rb.velocity);
-            
+                
         }
     }
 
