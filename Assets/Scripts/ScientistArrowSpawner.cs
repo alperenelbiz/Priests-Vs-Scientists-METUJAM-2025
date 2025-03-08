@@ -7,6 +7,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     public float fireRate = 2f;
     public float shootForce = 10f;
     private bool isSpaceMode = false;
+    public float minDistancetoAttack = 7f;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -40,14 +41,14 @@ public class ScientistArrowSpawner : MonoBehaviour
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearestTarget = null;
-        float minDistance = 7f;
+        float minDistance = Mathf.Infinity;
 
         foreach (GameObject target in targets)
         {
             if (target.transform == transform) continue; // Kendisini hedef almamasını sağlar
 
             float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance < minDistance)
+            if (distance < minDistance && distance < minDistancetoAttack)
             {
                 minDistance = distance;
                 nearestTarget = target.transform;
