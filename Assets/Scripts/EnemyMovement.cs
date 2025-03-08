@@ -21,6 +21,8 @@ public class EnemyMovement : MonoBehaviour
     private bool hasShotArrow = false; // Prevents multiple arrow shots
     private bool isScientistShooting = false; // Prevents multiple scientist attacks
 
+    [SerializeField] private Animator animator; // Animator reference
+
     private PapazArrowSpawner arrowSpawner; 
 
     void Start()
@@ -40,11 +42,12 @@ public class EnemyMovement : MonoBehaviour
     {
         if (targetPosition == null)
         {
-            //Debug.LogError(gameObject.name + ": Target position is missing!");
+            //Debug.LogError(gameObject.name + ": Targetposition is missing!");
             return;
         }
-
         //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
+        
+        animator.SetBool("isWalking", true);
 
         // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
@@ -64,6 +67,7 @@ public class EnemyMovement : MonoBehaviour
             {
                 //Debug.Log("✅ " + gameObject.name + " reached target");
                 moveTween = null;
+                animator.SetBool("isWalking", false);
                 TryShootArrow();
                 TriggerScientistAttack();
             });
@@ -94,6 +98,7 @@ public class EnemyMovement : MonoBehaviour
         {
             moveTween.Pause();
             isPaused = true;
+            animator.SetBool("isWalking", false);
             TryShootArrow();
             TriggerScientistAttack();
         }
@@ -102,6 +107,7 @@ public class EnemyMovement : MonoBehaviour
             //Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
+            animator.SetBool("isWalking", true);
             hasShotArrow = false;
             isScientistShooting = false;
         }
@@ -117,6 +123,7 @@ public class EnemyMovement : MonoBehaviour
             //Debug.Log($"🛑 {gameObject.name} reached its target, stopping.");
             moveTween.Kill();
             moveTween = null;
+            animator.SetBool("isWalking", false);
             TryShootArrow();
             TriggerScientistAttack();
 

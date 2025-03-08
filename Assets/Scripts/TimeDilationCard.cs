@@ -10,11 +10,7 @@ public class TimeDilationCard : MonoBehaviour
     [Header("Speed Boost Settings")]
     [SerializeField] private float boostDuration = 3f; // Duration of speed boost
     [SerializeField] private float boostMultiplier = 1.5f; // Increases speed (1.5 = 50% faster)
-
-    [Header("Key Bindings")]
-    [SerializeField] private KeyCode slowKey = KeyCode.T; // Press 'T' to slow down enemies
-    [SerializeField] private KeyCode boostKey = KeyCode.Y; // Press 'Y' to speed up enemies
-
+    
     void Update()
     {
         
