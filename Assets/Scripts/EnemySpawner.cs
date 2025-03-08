@@ -4,21 +4,45 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
-    public GameObject enemyPrefab;
+    public List<GameObject> enemyPrefabs;
     public Vector3 spawnAreaSize = new Vector3(10, 0, 10);
     public Transform targetPoint;
-    public int enemyCount = 10;
+    public int maxActiveEnemies = 5; // Limit active enemies at a time
+    public float spawnInterval = 2f; // Time between spawns
+
+    private Queue<GameObject> inactiveEnemies = new Queue<GameObject>(); // Queue for reusing enemies
+    private int activeEnemyCount = 0; // Track active enemies
 
     void Start()
     {
-        for (int i = 0; i < enemyCount; i++)
+        // Store all inactive enemies in the queue
+        foreach (GameObject enemy in enemyPrefabs)
         {
-            SpawnEnemy();
+            enemy.SetActive(false);
+            inactiveEnemies.Enqueue(enemy);
+        }
+
+        // Start spawning enemies with a delay
+        StartCoroutine(SpawnEnemiesRoutine());
+    }
+
+    IEnumerator SpawnEnemiesRoutine()
+    {
+        while (true)
+        {
+            if (activeEnemyCount < maxActiveEnemies && inactiveEnemies.Count > 0)
+            {
+                SpawnEnemy();
+            }
+            yield return new WaitForSeconds(spawnInterval);
         }
     }
 
     void SpawnEnemy()
     {
+        if (inactiveEnemies.Count == 0) return;
+
+        GameObject enemy = inactiveEnemies.Dequeue(); // Get an inactive enemy
         Vector3 randomPosition = new Vector3(
             Random.Range(-spawnAreaSize.x / 2, spawnAreaSize.x / 2),
             0,
@@ -27,9 +51,30 @@ public class EnemySpawner : MonoBehaviour
 
         randomPosition += transform.position;
 
-        GameObject enemy = Instantiate(enemyPrefab, randomPosition, Quaternion.identity);
+        enemy.transform.position = randomPosition;
+        enemy.SetActive(true);
+        activeEnemyCount++;
+
+        // Assign target position for movement
         EnemyMovement enemyController = enemy.GetComponent<EnemyMovement>();
-        enemyController.targetPosition = targetPoint;
+        if (enemyController != null)
+        {
+            enemyController.targetPosition = targetPoint;
+        }
+
+        // Assign spawner reference to HealthSystem
+        HealthSystem healthSystem = enemy.GetComponent<HealthSystem>();
+        if (healthSystem != null)
+        {
+            healthSystem.spawner = this;
+        }
+    }
+
+    public void OnEnemyDeath(GameObject enemy)
+    {
+        enemy.SetActive(false);
+        inactiveEnemies.Enqueue(enemy);
+        activeEnemyCount--;
     }
 
     void OnDrawGizmos()

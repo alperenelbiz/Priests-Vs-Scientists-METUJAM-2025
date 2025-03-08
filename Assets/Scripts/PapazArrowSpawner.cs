@@ -140,7 +140,7 @@ public class PapazArrowSpawner : MonoBehaviour
     {
         isMarieCurieModeActive = true;
         radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
-        StartCoroutine(HealOverTime());
+        //StartCoroutine(HealOverTime());
     }
 
     IEnumerator HealOverTime()

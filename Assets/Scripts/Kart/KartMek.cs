@@ -259,7 +259,7 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    void ZamanDelay(string name, float multiplier, float duration,string targetTag) // asker özellikleri arttır!!!!
+    void ZamanDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
@@ -364,6 +364,7 @@ public class KartMek : MonoBehaviour
 
             //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
             priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
+
 
         }
 

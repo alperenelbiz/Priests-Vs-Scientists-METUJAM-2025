@@ -8,6 +8,8 @@ public class HealthSystem : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
+    public EnemySpawner spawner;
+
     void Start()
     {
         currentHealth = maxHealth;
@@ -33,6 +35,6 @@ public class HealthSystem : MonoBehaviour
     void Die()
     {
         Debug.Log(gameObject.name + " öldü!");
-        Destroy(gameObject);
+        spawner.OnEnemyDeath(gameObject);
     }
 }
