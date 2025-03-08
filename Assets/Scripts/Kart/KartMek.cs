@@ -367,7 +367,7 @@ public class KartMek : MonoBehaviour
             // Start the coroutine to handle the saptir bool
 
             //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
-            priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
+            //priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
             aktifKartlar.Remove(kart);
 
         }

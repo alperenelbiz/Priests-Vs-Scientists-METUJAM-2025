@@ -37,4 +37,9 @@ public class HealthSystem : MonoBehaviour
         Debug.Log(gameObject.name + " öldü!");
         spawner.OnEnemyDeath(gameObject);
     }
+
+    public void ResetHealth()
+    {
+        currentHealth = maxHealth; // Reset health to full
+    }
 }

@@ -36,7 +36,7 @@ public class PapazArrowSpawner : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isMarieCurieModeActive)
         {
-            ActivateMarieCurieMode();
+            //ActivateMarieCurieMode();
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) && !isHawkingModeActive) 
         {
@@ -136,12 +136,12 @@ public class PapazArrowSpawner : MonoBehaviour
         // Son h�z vekt�r�n� belirle
         return velocityXZ + Vector3.up * initialVelocityY;
     }
-    public void ActivateMarieCurieMode()
-    {
-        isMarieCurieModeActive = true;
-        radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
-        //StartCoroutine(HealOverTime());
-    }
+    //public void ActivateMarieCurieMode()
+    //{
+    //    isMarieCurieModeActive = true;
+    //    radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
+    //    //StartCoroutine(HealOverTime());
+    //}
 
     IEnumerator HealOverTime()
     {
@@ -153,14 +153,14 @@ public class PapazArrowSpawner : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        DeactivateMarieCurieMode();
+        //DeactivateMarieCurieMode();
     }
 
-    void DeactivateMarieCurieMode()
-    {
-        isMarieCurieModeActive = false;
-        radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
-    }
+    //void DeactivateMarieCurieMode()
+    //{
+    //    isMarieCurieModeActive = false;
+    //    radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
+   // }
 
     /*public void ActivateHawkingMode()
     {
