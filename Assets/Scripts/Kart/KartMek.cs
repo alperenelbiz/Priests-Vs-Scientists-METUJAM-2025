@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -28,9 +29,14 @@ public class KartMek : MonoBehaviour
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
+    
+    
+    public List<GameObject> placementAreas = new List<GameObject>();
+    public TurretFollow turretCursor;
+
     void Awake()
     {
-        
+
         eventSystem = GameObject.Find("Event System");
         //levelControl = eventSystem.GetComponent<LevelControl>();
 
@@ -95,7 +101,7 @@ public class KartMek : MonoBehaviour
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
-
+           
             cost = 2,
             OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
@@ -103,7 +109,27 @@ public class KartMek : MonoBehaviour
         };
 
         kartListesi.Add(yavaþlatmaKartýOluþtur);
-        
+
+        GameObject prefabForCard;
+        Kart turretKartýOluþtur = new()
+        {
+            ad = "Turret",
+            aciklama = "Turret koy",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+           
+
+            cost = 2,
+            OnDestroy = (kart) => TurretKoy()
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+
+        kartListesi.Add(turretKartýOluþtur);
+
 
     }
     private void Start()
@@ -229,7 +255,18 @@ public class KartMek : MonoBehaviour
         }
         
         Debug.Log(kart.ad + " seçildi");
-       
+        }
+
+    void TurretKoy()
+    {
+
+        turretCursor.gameObject.SetActive(true);
+
+        foreach (var area in placementAreas)
+        {
+            area.SetActive(true);
+        }
+
     }
 
     void okSaptýr(string name,bool saptir)
