@@ -471,6 +471,7 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isArcher: 0
   animator: {fileID: 469442029}
 --- !u!114 &469442034
 MonoBehaviour:
@@ -1546,7 +1547,7 @@ PrefabInstance:
       addedObject: {fileID: 1916296318}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 28920300c0a97094eab602ea5e84637d, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1916296323}
+      addedObject: {fileID: 1916296325}
   m_SourcePrefab: {fileID: 100100000, guid: 28920300c0a97094eab602ea5e84637d, type: 3}
 --- !u!1 &1916296317 stripped
 GameObject:
@@ -1629,8 +1630,9 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isArcher: 0
   animator: {fileID: 1916296318}
---- !u!114 &1916296323
+--- !u!114 &1916296325
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
