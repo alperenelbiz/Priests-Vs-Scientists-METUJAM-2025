@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using System.Collections;
 
@@ -7,6 +8,7 @@ public class PapazArrowSpawner : MonoBehaviour
     public GameObject blackHolePrefab;
     public float fireRate = 2f;
     public float shootForce = 10f;
+    public float minDistanceToAttack =7f;
 
     private bool isMarieCurieModeActive = false;
     public HealthSystem healthSystem; // Saðlýk sistemine eriþim
@@ -52,12 +54,12 @@ public class PapazArrowSpawner : MonoBehaviour
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearestTarget = null;
-        float minDistance = 7f;
+        float minDistance = Mathf.Infinity;
 
         foreach (GameObject target in targets)
         {
             float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance < minDistance)
+            if (distance < minDistance && distance < minDistanceToAttack)
             {
                 minDistance = distance;
                 nearestTarget = target.transform;

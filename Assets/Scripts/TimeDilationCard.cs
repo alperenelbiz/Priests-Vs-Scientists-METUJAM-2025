@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class TimeDilationCard : MonoBehaviour
@@ -16,24 +17,34 @@ public class TimeDilationCard : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(slowKey))
+        
+        if (Input.GetKeyDown(KeyCode.T) )
         {
-            ApplyEffectToAllEnemies(slowMultiplier, slowDuration);
+            print("Pressed slow key");
+            ApplyEffectToAllEnemies(slowMultiplier, slowDuration, "Scientist");
         }
 
-        if (Input.GetKeyDown(boostKey))
+        if (Input.GetKeyDown(KeyCode.Y))
         {
-            ApplyEffectToAllEnemies(boostMultiplier, boostDuration);
+            print("Pressed boost key");
+            ApplyEffectToAllEnemies(boostMultiplier, boostDuration, "Papaz");
         }
     }
 
-    private void ApplyEffectToAllEnemies(float multiplier, float duration)
+    private void ApplyEffectToAllEnemies(float multiplier, float duration, string targetTag)
     {
         EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
 
         foreach (var enemy in enemies)
         {
-            enemy.ApplySpeedEffect(multiplier, duration);
+            if (enemy.CompareTag(targetTag))
+            {
+                //Debug.Log($"✅ Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
+                enemy.ApplySpeedEffect(multiplier, duration);
+            }
+                
         }
     }
+    
+    
 }
