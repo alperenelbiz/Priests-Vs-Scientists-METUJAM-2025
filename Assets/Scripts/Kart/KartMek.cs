@@ -115,7 +115,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };

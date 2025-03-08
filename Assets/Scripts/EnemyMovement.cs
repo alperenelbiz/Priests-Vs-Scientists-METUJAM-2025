@@ -51,8 +51,8 @@ public class EnemyMovement : MonoBehaviour
         }
         //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
         
-        animator.SetBool("isWalking", true);
-        animator.SetBool("isAttacking", false);
+        //animator.SetBool("isWalking", true);
+        //animator.SetBool("isAttacking", false);
         hasAttacked = false;
         //animator.SetBool("isWalking", true);
 
