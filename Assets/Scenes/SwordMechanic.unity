@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4495458, g: 0.49961787, b: 0.57567537, a: 1}
+  m_IndirectSpecularColor: {r: 0.44954574, g: 0.499618, b: 0.57567537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -471,6 +471,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isPaused: 0
+  isArcher: 0
   animator: {fileID: 469442029}
 --- !u!114 &469442034
 MonoBehaviour:
@@ -505,7 +507,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &547946621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1629,6 +1631,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isPaused: 0
+  isArcher: 0
   animator: {fileID: 1916296318}
 --- !u!114 &1916296323
 MonoBehaviour:
