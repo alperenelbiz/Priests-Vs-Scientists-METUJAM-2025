@@ -58,11 +58,10 @@ public class EnemyMovement : MonoBehaviour
 
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
             .SetEase(Ease.InOutQuad)
-            .OnStart(() => Debug.Log("📍 " + gameObject.name + " started moving"))
-            .OnUpdate(() => Debug.Log("📍 " + gameObject.name + " position: " + transform.position))
+            
             .OnComplete(() =>
             {
-                Debug.Log("✅ " + gameObject.name + " reached target");
+               
                 moveTween = null;
                 TryShootArrow();
             });
@@ -97,7 +96,6 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (!enemyNearby && isPaused)
         {
-            Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
             hasShotArrow = false;

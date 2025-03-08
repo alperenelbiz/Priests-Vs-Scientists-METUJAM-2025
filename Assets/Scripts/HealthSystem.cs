@@ -16,7 +16,7 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log(gameObject.name + " hasar aldý! Yeni Can: " + currentHealth);
+        
 
         if (currentHealth <= 0)
         {
