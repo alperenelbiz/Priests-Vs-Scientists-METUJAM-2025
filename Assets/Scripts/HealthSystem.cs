@@ -18,7 +18,7 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log(gameObject.name + " hasar aldý! Yeni Can: " + currentHealth);
+        //Debug.Log(gameObject.name + " hasar aldï¿½! Yeni Can: " + currentHealth);
 
         if (currentHealth <= 0)
         {
@@ -29,12 +29,12 @@ public class HealthSystem : MonoBehaviour
     public void Heal(float amount)
     {
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
-        Debug.Log(gameObject.name + " saðlýk kazandý! Yeni Can: " + currentHealth);
+        //Debug.Log(gameObject.name + " saï¿½lï¿½k kazandï¿½! Yeni Can: " + currentHealth);
     }
 
     void Die()
     {
-        Debug.Log(gameObject.name + " öldü!");
+        //Debug.Log(gameObject.name + " ï¿½ldï¿½!");
         spawner.OnEnemyDeath(gameObject);
     }
 }
