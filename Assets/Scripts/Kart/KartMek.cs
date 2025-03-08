@@ -108,8 +108,10 @@ public class KartMek : MonoBehaviour
     }
     private void Start()
     {
+        
         DisplayCards();
     }
+   
     public void DisplayCards()
     {
         
