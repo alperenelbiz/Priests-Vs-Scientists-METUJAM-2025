@@ -1,15 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthSystem : MonoBehaviour
 {
-    public float maxHealth = 100f; // Maksimum can
+    public float maxHealth = 100f;
     private float currentHealth;
 
     void Start()
     {
-        currentHealth = maxHealth; // Baþlangýçta tam can
+        currentHealth = maxHealth;
     }
 
     public void TakeDamage(float damage)
@@ -23,9 +24,15 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
+    public void Heal(float amount)
+    {
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        Debug.Log(gameObject.name + " saðlýk kazandý! Yeni Can: " + currentHealth);
+    }
+
     void Die()
     {
         Debug.Log(gameObject.name + " öldü!");
-        Destroy(gameObject); // Karakter yok olur
+        Destroy(gameObject);
     }
 }

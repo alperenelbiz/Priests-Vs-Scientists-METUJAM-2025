@@ -7,9 +7,20 @@ public class PapazArrowSpawner : MonoBehaviour
     public float fireRate = 2f;
     public float shootForce = 10f;
 
+    private bool isMarieCurieModeActive = false;
+    public HealthSystem healthSystem; // Saðlýk sistemine eriþim
+    public RadioationEffect radiationEffect; // Parçacýk efekti
+
     void Start()
     {
         StartCoroutine(FireArrows());
+    }
+    void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha2) && !isMarieCurieModeActive)
+        {
+            ActivateMarieCurieMode();
+        }
     }
 
     IEnumerator FireArrows()
@@ -90,6 +101,31 @@ public class PapazArrowSpawner : MonoBehaviour
 
         // Son hýz vektörünü belirle
         return velocityXZ + Vector3.up * initialVelocityY;
+    }
+    void ActivateMarieCurieMode()
+    {
+        isMarieCurieModeActive = true;
+        radiationEffect.ActivateRadiation(); // Parçacýklarý baþlat
+        StartCoroutine(HealOverTime());
+    }
+
+    IEnumerator HealOverTime()
+    {
+        float duration = 5f;
+        float elapsedTime = 0f;
+        while (elapsedTime < duration)
+        {
+            healthSystem.Heal(10f * Time.deltaTime); // Yavaþ saðlýk artýþý
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+        DeactivateMarieCurieMode();
+    }
+
+    void DeactivateMarieCurieMode()
+    {
+        isMarieCurieModeActive = false;
+        radiationEffect.DeactivateRadiation(); // Parçacýklarý durdur
     }
 
 
