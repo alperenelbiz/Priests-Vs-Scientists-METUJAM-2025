@@ -4,12 +4,19 @@ using System.Collections;
 public class PapazArrowSpawner : MonoBehaviour
 {
     public GameObject arrowPrefab;
+    public GameObject blackHolePrefab;
     public float fireRate = 2f;
     public float shootForce = 10f;
 
     private bool isMarieCurieModeActive = false;
     public HealthSystem healthSystem; // Saðlýk sistemine eriþim
     public RadioationEffect radiationEffect; // Parçacýk efekti
+
+    public float blackHoleDuration = 5f;
+    public float pushForce = 10f;
+    private bool isHawkingModeActive = false;
+
+
 
     void Start()
     {
@@ -20,6 +27,10 @@ public class PapazArrowSpawner : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isMarieCurieModeActive)
         {
             ActivateMarieCurieMode();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha4) && !isHawkingModeActive) 
+        {
+            ActivateHawkingMode();
         }
     }
 
@@ -126,6 +137,46 @@ public class PapazArrowSpawner : MonoBehaviour
     {
         isMarieCurieModeActive = false;
         radiationEffect.DeactivateRadiation(); // Parçacýklarý durdur
+    }
+
+    void ActivateHawkingMode()
+    {
+        Transform nearestScientist = FindNearestTarget("Scientist");
+        if (nearestScientist == null) return;
+
+        isHawkingModeActive = true;
+
+        // **Papaz ile Scientist’in tam ortasýnda kara delik oluþtur**
+        Vector3 spawnPosition = (transform.position + nearestScientist.position) / 2f;
+        spawnPosition.y = spawnPosition.y - 1f;
+        GameObject blackHole = Instantiate(blackHolePrefab, spawnPosition, Quaternion.identity);
+
+        StartCoroutine(BlackHoleEffect(blackHole, nearestScientist));
+    }
+
+    IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
+    {
+        float elapsedTime = 0f;
+        Rigidbody rb = scientist.GetComponent<Rigidbody>();
+
+        while (elapsedTime < blackHoleDuration)
+    {
+        if (scientist != null && rb != null)
+        {
+            Vector3 pushDirection = (scientist.position - blackHole.transform.position).normalized;
+            
+            // **Daha güçlü bir itme kuvveti uygula**
+            rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse);
+
+            Debug.Log("Scientist itildi! Yön: " + pushDirection);
+        }
+
+            elapsedTime += 0.1f;
+            yield return new WaitForSeconds(0.1f); // Daha sýk kontrol ederek etkiyi artýr
+    }
+
+        Destroy(blackHole);
+        isHawkingModeActive = false;
     }
 
 
