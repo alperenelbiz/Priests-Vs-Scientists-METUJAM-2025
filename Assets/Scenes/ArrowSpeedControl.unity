@@ -221,6 +221,7 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isPaused: 0
   isArcher: 1
   animator: {fileID: 54125873}
 --- !u!54 &54125878
@@ -367,7 +368,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &547946621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -380,10 +381,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68bccec4ef47e1d4194ed53370e1b32d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 6414635892403059212, guid: 2a70fb2ae4db8a04a86f508c77ffaca9, type: 3}
+  enemyPrefab: {fileID: 1717851917}
   spawnAreaSize: {x: 2, y: 0, z: 2}
   targetPoint: {fileID: 1806661062}
-  enemyCount: 10
+  enemyCount: 2
 --- !u!4 &547946622
 Transform:
   m_ObjectHideFlags: 0
@@ -393,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 547946620}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 23.43, y: 9.95, z: -18}
+  m_LocalPosition: {x: 23.03, y: 10.15, z: -23.83}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -496,6 +497,7 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isPaused: 0
   isArcher: 0
   animator: {fileID: 0}
 --- !u!1001 &703169905
@@ -911,6 +913,54 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 777335048607457776, guid: c2f73cafb3038bb40822efe3f713ca7e, type: 3}
   m_PrefabInstance: {fileID: 1539132147514427974}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1361615095
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1361615097}
+  - component: {fileID: 1361615096}
+  m_Layer: 0
+  m_Name: EnemySpawn (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1361615096
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361615095}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68bccec4ef47e1d4194ed53370e1b32d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 54125871}
+  spawnAreaSize: {x: 2, y: 0, z: 2}
+  targetPoint: {fileID: 1806661062}
+  enemyCount: 2
+--- !u!4 &1361615097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1361615095}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 23.03, y: 9.99, z: -6.39}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1454128938
 GameObject:
   m_ObjectHideFlags: 0
@@ -1533,6 +1583,7 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isPaused: 0
   isArcher: 1
   animator: {fileID: 1717851921}
 --- !u!114 &1717851919
@@ -1558,6 +1609,7 @@ MonoBehaviour:
   blackHoleDuration: 5
   pushForce: 10
   isHawkingModeActive: 0
+  detectionRadius: 10
 --- !u!114 &1717851920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6758,7 +6810,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!136 &2034413450
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -7110,6 +7162,7 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isPaused: 0
   isArcher: 0
   animator: {fileID: 0}
 --- !u!114 &2131902582 stripped
@@ -7485,6 +7538,7 @@ SceneRoots:
   - {fileID: 2069274953}
   - {fileID: 2034413453}
   - {fileID: 547946622}
+  - {fileID: 1361615097}
   - {fileID: 8200881024565792840}
   - {fileID: 8131816406120600466}
   - {fileID: 1869238222}

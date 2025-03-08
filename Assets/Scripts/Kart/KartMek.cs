@@ -313,10 +313,11 @@ public class KartMek : MonoBehaviour
             //priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
             //Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
-            //StartCoroutine(SetForSeconds(saptir, 5f, kart));
-            priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
-        }
+            //StartCoroutine(SetForSeconds(saptir, 5f, kart));else
 
+            //priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
+        }
+        
         Debug.Log(kart.ad + " seçildi");
 
 

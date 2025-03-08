@@ -22,6 +22,9 @@ public class PapazArrowSpawner : MonoBehaviour
     public float pushForce = 10f;
     public bool isHawkingModeActive = false;
 
+    public float detectionRadius = 10f; // Bilim insanlarını algılama yarıçapı
+
+
 
 
     void Start()
@@ -37,7 +40,7 @@ public class PapazArrowSpawner : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) && !isHawkingModeActive) 
         {
-            ActivateHawkingMode();
+            //ActivateHawkingMode();
         }
     }
 
@@ -159,15 +162,39 @@ public class PapazArrowSpawner : MonoBehaviour
         radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
     }
 
-    public void ActivateHawkingMode()
+    /*public void ActivateHawkingMode()
     {
+        Transform nearestScientist = DetectScientist();
+        if (nearestScientist == null)
+        {
+            Debug.LogWarning("⚠ En yakın Scientist bulunamadı!");
+            return;
+        }
 
-    }
+        isHawkingModeActive = true;
 
-    
+        // **Kara delik oluştur**
+        Vector3 spawnPosition = (transform.position + nearestScientist.position) / 2f;
+        spawnPosition.y -= 1f;
+        GameObject blackHole = Instantiate(blackHolePrefab, spawnPosition, Quaternion.identity);
+
+        // **Scientist’i kara delikten uzağa it**
+        Rigidbody rb = nearestScientist.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 pushDirection = (nearestScientist.position - blackHole.transform.position).normalized;
+            rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse); // Aniden itme
+            Debug.Log($"💥 Scientist {pushDirection} yönüne itildi!");
+        }
+
+        StartCoroutine(BlackHoleEffect(blackHole, nearestScientist));
+    }*/
 
 
-    IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
+
+
+
+    /*IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
     {
         float elapsedTime = 0f;
         Rigidbody rb = scientist.GetComponent<Rigidbody>();
@@ -177,22 +204,45 @@ public class PapazArrowSpawner : MonoBehaviour
             if (scientist != null && rb != null)
             {
                 Vector3 pushDirection = (scientist.position - blackHole.transform.position).normalized;
-                
-                // **Daha g��l� bir itme kuvveti uygula**
-                rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse);
 
-                Debug.Log("Scientist itildi! Y�n: " + pushDirection);
+                // **Her 0.1 saniyede bir ek itme uygula (Kademeli güç veriyoruz)**
+                rb.AddForce(pushDirection * (pushForce * 0.1f) * rb.mass, ForceMode.Force);
+
+                Debug.Log($"Scientist yavaş yavaş uzaklaşıyor! Kuvvet: {pushForce * 0.1f}");
             }
 
             elapsedTime += 0.1f;
-            yield return new WaitForSeconds(0.1f); // Daha s�k kontrol ederek etkiyi art�r
+            yield return new WaitForSeconds(0.1f);
         }
-
-        
 
         Destroy(blackHole);
         isHawkingModeActive = false;
     }
+
+    Transform DetectScientist()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        Transform nearestTarget = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (var col in colliders)
+        {
+            if (col.CompareTag("Scientist")) // Sadece Scientistleri kontrol et
+            {
+                float distance = Vector3.Distance(transform.position, col.transform.position);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestTarget = col.transform;
+                }
+            }
+        }
+
+        return nearestTarget; // Eğer bilim insanı yoksa null döner
+    }*/
+
+
 
 
 }
