@@ -10,7 +10,7 @@ public class CameraMovement : MonoBehaviour
 
     void Update()
     {
-        float moveHorizontal = Input.GetAxis("Vertical"); // A and D keys for horizontal movement
+        float moveHorizontal = Input.GetAxis("Horizontal"); // A and D keys for horizontal movement
         float newZ = transform.position.z + moveHorizontal * normalSpeed * Time.deltaTime;
 
         // Clamp the position within boundaries
