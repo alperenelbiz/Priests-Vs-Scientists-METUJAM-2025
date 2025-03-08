@@ -51,8 +51,8 @@ public class EnemyMovement : MonoBehaviour
         }
         //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
         
-        animator.SetBool("isWalking", true);
-        animator.SetBool("isAttacking", false);
+        //animator.SetBool("isWalking", true);
+        //animator.SetBool("isAttacking", false);
         hasAttacked = false;
         //animator.SetBool("isWalking", true);
 
@@ -83,7 +83,6 @@ public class EnemyMovement : MonoBehaviour
             {
                 moveTween = null;
                 animator.SetBool("isWalking", false);
-                animator.SetBool("isAttacking", true);
                 TryShootArrow();
                 TriggerScientistAttack();
                 PerformSwordAttack();
@@ -153,7 +152,6 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Kill();
             moveTween = null;
             animator.SetBool("isWalking", false);
-            animator.SetBool("isAttacking", true);
             TryShootArrow();
             TriggerScientistAttack();
             PerformSwordAttack();
@@ -179,6 +177,8 @@ public class EnemyMovement : MonoBehaviour
         while (hasAttacked) // Keep attacking as long as they are in attack mode
         {
             Debug.Log($"⚔ {gameObject.name} attacks!");
+            
+            animator.SetBool("isAttacking", true);
             swordAttack.DealDamage(); // Apply damage
 
             yield return new WaitForSeconds(2f); // Delay between attacks (adjust if needed)

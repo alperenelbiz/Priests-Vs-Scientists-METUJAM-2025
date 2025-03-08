@@ -14,7 +14,6 @@ public class SwordAttack : MonoBehaviour
         {
             if (enemy.TryGetComponent(out HealthSystem health))
             {
-                
                 health.TakeDamage(attackDamage);
             }
         }
