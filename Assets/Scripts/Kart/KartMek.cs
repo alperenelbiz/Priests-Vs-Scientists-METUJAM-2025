@@ -190,21 +190,26 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    //void SilahHasari(string name, int cardLvl) // asker özellikleri arttýr!!!!
-    //{
-    //    Kart kart = kartListesi.FirstOrDefault(x => x.ad == name && x.lvl == cardLvl);
-    //    if (kart != null)
-    //    {
-    //        CoinUpdate(kart);
-    //        kart.kalanAdet--;
-    //        if (kart.kalanAdet == 0)
-    //        {
-    //            kart.aktiflik = false;
-    //        }
+    void ZamanHýzlandýrýcý(string name) // asker özellikleri arttýr!!!!
+    {
+        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+        if (kart != null)
+        {
+            //CoinUpdate(kart);
+            kart.kalanAdet--;
+            if (kart.kalanAdet == 0)
+            {
+                kart.aktiflik = false;
+            }
 
-    //        bullet.GetComponent<BulletScript>().UpdateAmmoDamage((int)kart.value);
-    //    }
-    //    BackToCharacter();
-    //    Debug.Log(kart.ad + " seçildi");
-    //}
+           
+        }
+        
+        Debug.Log(kart.ad + " seçildi");
+    }
+
+    private void HýzlandýrmaSeçildi()
+    {
+        ZamanHýzlandýrýcý();
+    }
 }
