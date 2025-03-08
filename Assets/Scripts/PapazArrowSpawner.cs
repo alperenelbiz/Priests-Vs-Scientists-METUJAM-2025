@@ -9,10 +9,11 @@ public class PapazArrowSpawner : MonoBehaviour
     public float fireRate = 2f;
     public float shootForce = 10f;
     public float minDistanceToAttack =7f;
-
+    private float arrowSpeedMultiplier = 1f;
+    
     private bool isMarieCurieModeActive = false;
-    public HealthSystem healthSystem; // Saðlýk sistemine eriþim
-    public RadioationEffect radiationEffect; // Parçacýk efekti
+    public HealthSystem healthSystem; // Saï¿½lï¿½k sistemine eriï¿½im
+    public RadioationEffect radiationEffect; // Parï¿½acï¿½k efekti
 
     public float blackHoleDuration = 5f;
     public float pushForce = 10f;
@@ -40,7 +41,7 @@ public class PapazArrowSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(fireRate);
+            yield return new WaitForSeconds(fireRate * arrowSpeedMultiplier);
             Transform nearestTarget = FindNearestTarget("Scientist");
 
             if (nearestTarget != null)
@@ -48,6 +49,18 @@ public class PapazArrowSpawner : MonoBehaviour
                 ShootArrow(nearestTarget);
             }
         }
+    }
+    
+    public void SetArrowSpeedMultiplier(float multiplier, float duration)
+    {
+        arrowSpeedMultiplier = multiplier;
+        StartCoroutine(ResetArrowSpeed(duration));
+    }
+
+    IEnumerator ResetArrowSpeed(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        arrowSpeedMultiplier = 1f;
     }
 
     public Transform FindNearestTarget(string enemyTag)
@@ -118,7 +131,7 @@ public class PapazArrowSpawner : MonoBehaviour
     void ActivateMarieCurieMode()
     {
         isMarieCurieModeActive = true;
-        radiationEffect.ActivateRadiation(); // Parçacýklarý baþlat
+        radiationEffect.ActivateRadiation(); // Parï¿½acï¿½klarï¿½ baï¿½lat
         StartCoroutine(HealOverTime());
     }
 
@@ -128,7 +141,7 @@ public class PapazArrowSpawner : MonoBehaviour
         float elapsedTime = 0f;
         while (elapsedTime < duration)
         {
-            healthSystem.Heal(10f * Time.deltaTime); // Yavaþ saðlýk artýþý
+            healthSystem.Heal(10f * Time.deltaTime); // Yavaï¿½ saï¿½lï¿½k artï¿½ï¿½ï¿½
             elapsedTime += Time.deltaTime;
             yield return null;
         }
@@ -138,7 +151,7 @@ public class PapazArrowSpawner : MonoBehaviour
     void DeactivateMarieCurieMode()
     {
         isMarieCurieModeActive = false;
-        radiationEffect.DeactivateRadiation(); // Parçacýklarý durdur
+        radiationEffect.DeactivateRadiation(); // Parï¿½acï¿½klarï¿½ durdur
     }
 
     void ActivateHawkingMode()
@@ -148,7 +161,7 @@ public class PapazArrowSpawner : MonoBehaviour
 
         isHawkingModeActive = true;
 
-        // **Papaz ile Scientist’in tam ortasýnda kara delik oluþtur**
+        // **Papaz ile Scientistï¿½in tam ortasï¿½nda kara delik oluï¿½tur**
         Vector3 spawnPosition = (transform.position + nearestScientist.position) / 2f;
         spawnPosition.y = spawnPosition.y - 1f;
         GameObject blackHole = Instantiate(blackHolePrefab, spawnPosition, Quaternion.identity);
@@ -162,20 +175,20 @@ public class PapazArrowSpawner : MonoBehaviour
         Rigidbody rb = scientist.GetComponent<Rigidbody>();
 
         while (elapsedTime < blackHoleDuration)
-    {
-        if (scientist != null && rb != null)
         {
-            Vector3 pushDirection = (scientist.position - blackHole.transform.position).normalized;
-            
-            // **Daha güçlü bir itme kuvveti uygula**
-            rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse);
+            if (scientist != null && rb != null)
+            {
+                Vector3 pushDirection = (scientist.position - blackHole.transform.position).normalized;
+                
+                // **Daha gï¿½ï¿½lï¿½ bir itme kuvveti uygula**
+                rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse);
 
-            Debug.Log("Scientist itildi! Yön: " + pushDirection);
-        }
+                Debug.Log("Scientist itildi! Yï¿½n: " + pushDirection);
+            }
 
             elapsedTime += 0.1f;
-            yield return new WaitForSeconds(0.1f); // Daha sýk kontrol ederek etkiyi artýr
-    }
+            yield return new WaitForSeconds(0.1f); // Daha sï¿½k kontrol ederek etkiyi artï¿½r
+        }
 
         Destroy(blackHole);
         isHawkingModeActive = false;

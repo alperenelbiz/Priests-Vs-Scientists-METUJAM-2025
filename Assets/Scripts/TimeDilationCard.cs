@@ -18,12 +18,15 @@ public class TimeDilationCard : MonoBehaviour
         {
             print("Pressed slow key");
             ApplyEffectToAllEnemies(slowMultiplier, slowDuration, "Scientist");
+            ApplyArrowSpeedEffect(slowMultiplier, slowDuration, "Scientist");
+
         }
 
         if (Input.GetKeyDown(KeyCode.Y))
         {
             print("Pressed boost key");
             ApplyEffectToAllEnemies(boostMultiplier, boostDuration, "Papaz");
+            ApplyArrowSpeedEffect(boostMultiplier, boostDuration, "Papaz");
         }
     }
 
@@ -42,5 +45,26 @@ public class TimeDilationCard : MonoBehaviour
         }
     }
     
+    private void ApplyArrowSpeedEffect(float multiplier, float duration, string targetTag)
+    {
+        if (targetTag == "Scientist")
+        {
+            Debug.Log("Applying arrow speed effect to Scientists");
+            ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
+            foreach (var spawner in scientistSpawners)
+            {
+                spawner.SetArrowSpeedMultiplier(multiplier, duration);
+            }
+        }
+        else if (targetTag == "Papaz")
+        {
+            Debug.Log("Applying arrow speed effect to Papaz");
+            PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
+            foreach (var spawner in papazSpawners)
+            {
+                spawner.SetArrowSpeedMultiplier(multiplier, duration);
+            }
+        }
+    }
     
 }

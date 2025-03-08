@@ -8,6 +8,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     public float shootForce = 10f;
     public bool isSpaceMode = false;
     public float minDistancetoAttack = 7f;
+    private float arrowSpeedMultiplier = 1f;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -26,7 +27,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(fireRate);
+            yield return new WaitForSeconds(fireRate*arrowSpeedMultiplier);
             Transform nearestTarget = FindNearestTarget("Papaz");
             Debug.Log("b");
             if (nearestTarget != null)
@@ -56,7 +57,18 @@ public class ScientistArrowSpawner : MonoBehaviour
         }
         return nearestTarget;
     }
+    
+    public void SetArrowSpeedMultiplier(float multiplier, float duration)
+    {
+        arrowSpeedMultiplier = multiplier;
+        StartCoroutine(ResetArrowSpeed(duration));
+    }
 
+    IEnumerator ResetArrowSpeed(float duration)
+    {
+        yield return new WaitForSeconds(duration);
+        arrowSpeedMultiplier = 1f;
+    }
 
     public void ShootArrow(Transform target)
     {
