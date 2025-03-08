@@ -40,7 +40,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearestTarget = null;
-        float minDistance = Mathf.Infinity;
+        float minDistance = 7f;
 
         foreach (GameObject target in targets)
         {
@@ -57,7 +57,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     }
 
 
-    void ShootArrow(Transform target)
+    public void ShootArrow(Transform target)
     {
         GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
         Rigidbody rb = newArrow.GetComponent<Rigidbody>();

@@ -37,11 +37,11 @@ public class PapazArrowSpawner : MonoBehaviour
         }
     }
 
-    Transform FindNearestTarget(string enemyTag)
+    public Transform FindNearestTarget(string enemyTag)
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearestTarget = null;
-        float minDistance = Mathf.Infinity;
+        float minDistance = 7f;
 
         foreach (GameObject target in targets)
         {
@@ -55,7 +55,7 @@ public class PapazArrowSpawner : MonoBehaviour
         return nearestTarget;
     }
 
-    void ShootArrow(Transform target)
+    public void ShootArrow(Transform target)
     {
         GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
         Rigidbody rb = newArrow.GetComponent<Rigidbody>();
@@ -72,34 +72,34 @@ public class PapazArrowSpawner : MonoBehaviour
                 Vector3 launchVelocity = CalculateLaunchVelocity(target);
                 rb.velocity = launchVelocity;
                 rb.useGravity = true;
-                Debug.Log("Eðimli ok fýrlatýldý! Hedef: " + target.name + " | Hýz: " + rb.velocity);
+                Debug.Log("Eï¿½imli ok fï¿½rlatï¿½ldï¿½! Hedef: " + target.name + " | Hï¿½z: " + rb.velocity);
             
         }
     }
 
     Vector3 CalculateLaunchVelocity(Transform target)
     {
-        Vector3 start = transform.position; // Kapsülün pozisyonu
+        Vector3 start = transform.position; // Kapsï¿½lï¿½n pozisyonu
         Vector3 end = target.position; // Hedefin pozisyonu
-        float gravity = Mathf.Abs(Physics.gravity.y); // Yerçekimi
+        float gravity = Mathf.Abs(Physics.gravity.y); // Yerï¿½ekimi
 
-        // Hedefin yatay uzaklýðýný hesapla
+        // Hedefin yatay uzaklï¿½ï¿½ï¿½nï¿½ hesapla
         Vector3 horizontalDirection = new Vector3(end.x - start.x, 0, end.z - start.z);
         float horizontalDistance = horizontalDirection.magnitude;
 
-        // Hedefin yüksekliði farký
+        // Hedefin yï¿½ksekliï¿½i farkï¿½
         float heightDifference = end.y - start.y;
 
-        // Ýlk hýzýn yukarý bileþenini hesapla
+        // ï¿½lk hï¿½zï¿½n yukarï¿½ bileï¿½enini hesapla
         float initialVelocityY = Mathf.Sqrt(2 * gravity * heightDifference + gravity * horizontalDistance);
 
-        // Uçuþ süresini hesapla
+        // Uï¿½uï¿½ sï¿½resini hesapla
         float time = (initialVelocityY / gravity) * 2;
 
-        // XZ yönündeki hýz bileþenini hesapla
+        // XZ yï¿½nï¿½ndeki hï¿½z bileï¿½enini hesapla
         Vector3 velocityXZ = horizontalDirection.normalized * (horizontalDistance / time);
 
-        // Son hýz vektörünü belirle
+        // Son hï¿½z vektï¿½rï¿½nï¿½ belirle
         return velocityXZ + Vector3.up * initialVelocityY;
     }
     void ActivateMarieCurieMode()
