@@ -200,6 +200,7 @@ MonoBehaviour:
   arrowPrefab: {fileID: 6853439453261350569, guid: eb23ec9117ef7264a8940559aaabe577, type: 3}
   fireRate: 0.5
   shootForce: 10
+  isSpaceMode: 0
   minDistancetoAttack: 7
 --- !u!114 &54125876
 MonoBehaviour:
@@ -220,6 +221,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isArcher: 0
+  animator: {fileID: 0}
 --- !u!1 &348734746
 GameObject:
   m_ObjectHideFlags: 0
@@ -328,6 +331,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
+  isArcher: 0
+  animator: {fileID: 0}
 --- !u!1001 &703169905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -346,7 +351,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca4c690470d1eac479003638b02a0ddc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -29.7
+      value: -24.9
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca4c690470d1eac479003638b02a0ddc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -661,8 +666,6 @@ MonoBehaviour:
   slowMultiplier: 0.5
   boostDuration: 3
   boostMultiplier: 1.5
-  slowKey: 116
-  boostKey: 121
 --- !u!4 &1318680903
 Transform:
   m_ObjectHideFlags: 0
@@ -1020,6 +1023,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isArcher: 0
+  animator: {fileID: 0}
 --- !u!114 &1717851919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1037,10 +1042,12 @@ MonoBehaviour:
   fireRate: 0.5
   shootForce: 10
   minDistanceToAttack: 7
+  isMarieCurieModeActive: 0
   healthSystem: {fileID: 0}
   radiationEffect: {fileID: 0}
   blackHoleDuration: 5
   pushForce: 10
+  isHawkingModeActive: 0
 --- !u!114 &1717851920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1702,6 +1709,8 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
+  isArcher: 0
+  animator: {fileID: 0}
 --- !u!1001 &1483587829818261709
 PrefabInstance:
   m_ObjectHideFlags: 0
