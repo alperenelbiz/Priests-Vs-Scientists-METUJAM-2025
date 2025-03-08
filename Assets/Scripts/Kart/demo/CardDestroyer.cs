@@ -6,6 +6,7 @@ namespace demo {
         public CardContainer container;
         public void OnCardDestroyed(CardPlayed evt) {
             container.DestroyCard(evt.card);
+            Debug.Log(evt.card);
         }
     }
 }

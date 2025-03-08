@@ -34,10 +34,10 @@ public class KartMek : MonoBehaviour
         eventSystem = GameObject.Find("Event System");
         //levelControl = eventSystem.GetComponent<LevelControl>();
 
-        Kart yerÇekmiKartýOluþtur = new()
+        Kart radyasyonKartýOluþtur = new()
         {
-            ad = "Yer çekimi",
-            aciklama = "Yer çekimini sýfýrla",
+            ad = "RADYASYON",
+            aciklama = "Radyasyon yay",
             aktiflik = true,
             kalanAdet = 3,
             olasilik = 0.5f,
@@ -50,11 +50,11 @@ public class KartMek : MonoBehaviour
 
         };
         
-        kartListesi.Add(yerÇekmiKartýOluþtur);
-        Kart hýzlandýrmaKartýOluþtur = new()
+        kartListesi.Add(radyasyonKartýOluþtur);
+        Kart okSaptýrKartýOluþtur = new()
         {
-            ad = "Hýzlandýr",
-            aciklama = "Ben hýzým",
+            ad = "Ok saptýr",
+            aciklama = "Okun yönünü saptýr",
             aktiflik = true,
             kalanAdet = 3,
             olasilik = 0.5f,
@@ -67,7 +67,25 @@ public class KartMek : MonoBehaviour
 
         };
 
+        kartListesi.Add(okSaptýrKartýOluþtur);
+
+        Kart hýzlandýrmaKartýOluþtur = new()
+        {
+            ad = "Zamaný Hýzlandýr",
+            aciklama = "Ben hýzým",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+            cost = 2,
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+       
         kartListesi.Add(hýzlandýrmaKartýOluþtur);
+
         Kart yavaþlatmaKartýOluþtur = new()
         {
             ad = "Yavaþlat",
@@ -108,12 +126,12 @@ public class KartMek : MonoBehaviour
             // Kartý Instantiate et ve gerekli özellikleri ayarla
             Kart secilenKart = SecilenKartiGetir(kullanilanIndexler);
             GameObject cardObject = Instantiate(cardBack, Coordinates[i].position, Quaternion.identity, gameObject.transform);
-            cardObject.transform.SetParent(Coordinates[i]);
+           // cardObject.transform.SetParent(Coordinates[i]);
             
             cardObjectList.Add(cardObject);
-            
 
-
+            CardController cardController = cardObject.AddComponent<CardController>();
+            cardController.kart = secilenKart;
 
             if (secilenKart == null)
             {
@@ -190,7 +208,7 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    void ZamanHýzlandýrýcý(string name) // asker özellikleri arttýr!!!!
+    void ZamanDelay(string name, float multiplier, float duration) // asker özellikleri arttýr!!!!
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
@@ -201,15 +219,17 @@ public class KartMek : MonoBehaviour
             {
                 kart.aktiflik = false;
             }
+            EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
 
-           
+            foreach (var enemy in enemies)
+            {
+                enemy.ApplySpeedEffect(multiplier, duration);
+            }
+
         }
         
         Debug.Log(kart.ad + " seçildi");
     }
 
-    private void HýzlandýrmaSeçildi()
-    {
-        ZamanHýzlandýrýcý();
-    }
+    
 }

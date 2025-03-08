@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class Kart
     public int maxLevel { get; set; }
     public int cost { get; set; }
     public Sprite gorsel { get; set; }
-
+    public Action<Kart> OnDestroy;
     public delegate void KartSecildigindeHandler();
     public event KartSecildigindeHandler KartSecildiginde;
 
