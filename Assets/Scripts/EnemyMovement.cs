@@ -51,8 +51,8 @@ public class EnemyMovement : MonoBehaviour
         }
         //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
         
-        //animator.SetBool("isWalking", true);
-        //animator.SetBool("isAttacking", false);
+        animator.SetBool("isWalking", true);
+        animator.SetBool("isAttacking", false);
         hasAttacked = false;
         //animator.SetBool("isWalking", true);
 
@@ -100,11 +100,11 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (var col in colliders)
         {
-            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+            //Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
 
             if (col.CompareTag(enemyTag))
             {
-                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+                //Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
                 enemyNearby = true;
                 break;
             }
@@ -129,7 +129,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (!enemyNearby && isPaused)
         {
-            Debug.Log($"▶ {gameObject.name} resuming movement");
+            //Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
             animator.SetBool("isWalking", true);
@@ -162,7 +162,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (swordAttack != null && !hasAttacked)  // Only start attack loop if not already attacking
         {
-            Debug.Log($"⚔ {gameObject.name} starts attacking!");
+            //Debug.Log($"⚔ {gameObject.name} starts attacking!");
 
             hasAttacked = true; // Enemy is now in attack mode
             animator.SetBool("isWalking", false);
@@ -176,7 +176,7 @@ public class EnemyMovement : MonoBehaviour
     {
         while (hasAttacked) // Keep attacking as long as they are in attack mode
         {
-            Debug.Log($"⚔ {gameObject.name} attacks!");
+            //Debug.Log($"⚔ {gameObject.name} attacks!");
             
             animator.SetBool("isAttacking", true);
             swordAttack.DealDamage(); // Apply damage
