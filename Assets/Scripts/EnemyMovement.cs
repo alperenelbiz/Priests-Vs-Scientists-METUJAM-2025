@@ -5,96 +5,164 @@ using DG.Tweening;
 
 public class EnemyMovement : MonoBehaviour
 {
-    public Transform targetPosition; // Assign the destination in the Inspector
-    [SerializeField] private float duration = 2f; // Time in seconds for the movement
-    [SerializeField] private float detectionRadius = 3f; // Radius to check for the player
-    [SerializeField] private float deviationAmount = 0.5f; // How much deviation from the straight line
-    [SerializeField] private float stopThreshold = 0.5f; // How close to stop the movement
+    public Transform targetPosition; // Set in Inspector
+    [SerializeField] private float duration = 3f; // Time to reach target
+    [SerializeField] private float detectionRadius = 5f; // Detection range
+    [SerializeField] private string enemyTag; // Object to detect (e.g., "Scientist" or "Papaz")
+    [SerializeField] private float stopThreshold = 0.5f; // Distance to stop at
 
     [Header("Movement Boundaries")] 
-    [SerializeField] private Vector3 minBounds = new Vector3(-5f, 0f, -5f); // Minimum map boundary
-    [SerializeField] private Vector3 maxBounds = new Vector3(5f, 0f, 5f);  // Maximum map boundary
+    [SerializeField] private Vector3 minBounds = new Vector3(-5f, 0f, -5f); // Minimum boundary
+    [SerializeField] private Vector3 maxBounds = new Vector3(5f, 0f, 5f);  // Maximum boundary
 
-    private Tween moveTween; // Store the tween
+    private Tween moveTween; // Store movement tween
     private bool isPaused = false;
     private float fixedY; // Stores the Y position to keep it constant
+    private bool hasShotArrow = false; // Prevents multiple arrow shots
+    private bool isScientistShooting = false; // Prevents multiple scientist attacks
+
+    private PapazArrowSpawner arrowSpawner; 
 
     void Start()
     {
-        fixedY = transform.position.y; // Store initial Y position
+        fixedY = transform.position.y;
+        arrowSpawner = GetComponent<PapazArrowSpawner>();
         MoveToTarget();
     }
 
     void Update()
     {
-        CheckForPlayer();
+        DetectEnemy();
         CheckForStop();
     }
 
     void MoveToTarget()
     {
-        Vector3 startPosition = transform.position;
-        Vector3 endPosition = targetPosition.position;
+        if (targetPosition == null)
+        {
+            Debug.LogError(gameObject.name + ": Target position is missing!");
+            return;
+        }
 
-        // Ensure Y-axis stays fixed
-        startPosition.y = fixedY;
-        endPosition.y = fixedY;
+        Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
 
-        // Generate intermediate waypoints with slight randomness (only on X & Z axes)
+        // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
-        path[0] = startPosition;
+        path[0] = transform.position;
         path[1] = ClampToBounds(new Vector3(
-            (startPosition.x + endPosition.x) / 2 + Random.Range(-deviationAmount, deviationAmount),
-            fixedY, // Keep Y-axis fixed
-            (startPosition.z + endPosition.z) / 2 + Random.Range(-deviationAmount, deviationAmount)
+            (transform.position.x + targetPosition.position.x) / 2 + Random.Range(-0.5f, 0.5f),
+            fixedY,
+            (transform.position.z + targetPosition.position.z) / 2 + Random.Range(-0.5f, 0.5f)
         ));
-        path[2] = ClampToBounds(endPosition); // Ensure the final position stays inside bounds
+        path[2] = ClampToBounds(targetPosition.position);
 
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
             .SetEase(Ease.InOutQuad)
-            .OnComplete(() => moveTween = null);
+            .OnStart(() => Debug.Log("📍 " + gameObject.name + " started moving"))
+            .OnUpdate(() => Debug.Log("📍 " + gameObject.name + " position: " + transform.position))
+            .OnComplete(() =>
+            {
+                Debug.Log("✅ " + gameObject.name + " reached target");
+                moveTween = null;
+                TryShootArrow();
+            });
+        hasShotArrow = false;
+        isScientistShooting = false;
     }
 
-    void CheckForPlayer()
+    void DetectEnemy()
     {
+        if (string.IsNullOrEmpty(enemyTag)) return; // Prevent errors
+
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
-        bool playerNearby = false;
+        bool enemyNearby = false;
 
         foreach (var col in colliders)
         {
-            if (col.CompareTag("Player"))
+            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+
+            if (col.CompareTag(enemyTag))
             {
-                playerNearby = true;
+                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+                enemyNearby = true;
                 break;
             }
         }
 
-        if (playerNearby && moveTween != null && !isPaused)
+        if (enemyNearby && moveTween != null && !isPaused)
         {
             moveTween.Pause();
             isPaused = true;
+            TryShootArrow();
         }
-        else if (!playerNearby && isPaused)
+        else if (!enemyNearby && isPaused)
         {
+            Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
+            hasShotArrow = false;
+            isScientistShooting = false;
         }
     }
-    
+
     void CheckForStop()
     {
         if (moveTween == null) return;
 
-        float currentX = transform.position.x;
-        float targetX = targetPosition.position.x;
-
-        if (Mathf.Abs(currentX - targetX) <= stopThreshold) // Stop when close enough on X
+        float distance = Vector3.Distance(transform.position, targetPosition.position);
+        if (distance <= stopThreshold)
         {
-            moveTween.Kill(); // Stop movement
+            Debug.Log($"🛑 {gameObject.name} reached its target, stopping.");
+            moveTween.Kill();
             moveTween = null;
+            TryShootArrow();
+            TriggerScientistAttack();
+
         }
     }
+    
+    void TriggerScientistAttack()
+    {
+        GameObject[] scientists = GameObject.FindGameObjectsWithTag("Scientist"); // Find all scientists
+        Transform nearestScientist = null;
+        float minDistance = Mathf.Infinity;
 
+        foreach (GameObject scientist in scientists)
+        {
+            float distance = Vector3.Distance(transform.position, scientist.transform.position);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                nearestScientist = scientist.transform;
+            }
+        }
+
+        if (nearestScientist != null)
+        {
+            ScientistArrowSpawner scientistSpawner = nearestScientist.GetComponent<ScientistArrowSpawner>();
+            if (scientistSpawner != null)
+            {
+                Debug.Log($"🏹 Scientist {nearestScientist.name} is shooting an arrow at {gameObject.name}");
+                scientistSpawner.ShootArrow(transform); // Make the scientist shoot at this enemy
+                isScientistShooting = true;
+            }
+        }
+    }
+    
+    void TryShootArrow()
+    {
+        if (arrowSpawner != null && !hasShotArrow)
+        {
+            Transform nearestTarget = arrowSpawner.FindNearestTarget("Scientist"); // Find target
+            if (nearestTarget != null)
+            {
+                arrowSpawner.ShootArrow(nearestTarget); // Shoot arrow at nearest scientist
+                Debug.Log($"🏹 {gameObject.name} shot an arrow at {nearestTarget.name}");
+                hasShotArrow = true; // Prevent multiple shots while stopped
+            }
+        }
+    }
+    
     private Vector3 ClampToBounds(Vector3 position)
     {
         return new Vector3(
@@ -125,14 +193,9 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
-
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.red;
+        Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
-
-        // Draw map boundaries
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireCube((minBounds + maxBounds) / 2, maxBounds - minBounds);
     }
 }
