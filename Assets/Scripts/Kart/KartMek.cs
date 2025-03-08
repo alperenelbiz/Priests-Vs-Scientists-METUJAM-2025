@@ -22,7 +22,7 @@ public class KartMek : MonoBehaviour
     private List<Kart> aktifKartlar = new List<Kart>();
     //LevelControl levelControl;
     [SerializeField] public List<Transform> Coordinates = new List<Transform>();
-
+   
 
     List<GameObject> cardObjectList = new List<GameObject>();
     //public List<Sprite> kartImageList = new List<Sprite>();
@@ -108,9 +108,11 @@ public class KartMek : MonoBehaviour
             // Kartý Instantiate et ve gerekli özellikleri ayarla
             Kart secilenKart = SecilenKartiGetir(kullanilanIndexler);
             GameObject cardObject = Instantiate(cardBack, Coordinates[i].position, Quaternion.identity, gameObject.transform);
+            cardObject.transform.SetParent(Coordinates[i]);
             
             cardObjectList.Add(cardObject);
-            cardObject.transform.SetParent(Coordinates[i]);
+            
+
 
 
             if (secilenKart == null)
@@ -141,6 +143,7 @@ public class KartMek : MonoBehaviour
             // Seçilen kartý aktif kartlara ekle
             aktifKartlar.Add(secilenKart);
             kullanilanIndexler.Add(secilenKart.indeks);
+           
         }
     }
     Kart SecilenKartiGetir(List<int> kullanilanIndexler)
