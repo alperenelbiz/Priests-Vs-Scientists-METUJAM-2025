@@ -271,6 +271,28 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void StopMovement()
+    {
+        if (moveTween != null) // Eğer DOTween hareket ediyorsa
+        {
+            moveTween.Pause(); // **Hareketi durdur**
+            isPaused = true;
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", false);
+        }
+    }
+
+    public void ResumeMovement()
+    {
+        if (moveTween != null) // Eğer DOTween durmuşsa
+        {
+            moveTween.Play(); // **Hareketi devam ettir**
+            isPaused = false;
+            animator.SetBool("isWalking", true);
+        }
+    }
+
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

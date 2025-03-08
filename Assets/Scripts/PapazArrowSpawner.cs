@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
+using JetBrains.Annotations;
+
 
 public class PapazArrowSpawner : MonoBehaviour
 {
@@ -19,9 +22,12 @@ public class PapazArrowSpawner : MonoBehaviour
     public float pushForce = 10f;
     public bool isHawkingModeActive = false;
 
+
+
     void Start()
     {
         StartCoroutine(FireArrows());
+        
     }
     void Update()
     {
@@ -81,6 +87,7 @@ public class PapazArrowSpawner : MonoBehaviour
 
     public void ShootArrow(Transform target)
     {
+        if (target == null) return;
         GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
         Rigidbody rb = newArrow.GetComponent<Rigidbody>();
 
@@ -154,18 +161,11 @@ public class PapazArrowSpawner : MonoBehaviour
 
     public void ActivateHawkingMode()
     {
-        Transform nearestScientist = FindNearestTarget("Scientist");
-        if (nearestScientist == null) return;
 
-        isHawkingModeActive = true;
-
-        // **Papaz ile Scientist�in tam ortas�nda kara delik olu�tur**
-        Vector3 spawnPosition = (transform.position + nearestScientist.position) / 2f;
-        spawnPosition.y = spawnPosition.y - 1f;
-        GameObject blackHole = Instantiate(blackHolePrefab, spawnPosition, Quaternion.identity);
-
-        StartCoroutine(BlackHoleEffect(blackHole, nearestScientist));
     }
+
+    
+
 
     IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
     {
@@ -187,6 +187,8 @@ public class PapazArrowSpawner : MonoBehaviour
             elapsedTime += 0.1f;
             yield return new WaitForSeconds(0.1f); // Daha s�k kontrol ederek etkiyi art�r
         }
+
+        
 
         Destroy(blackHole);
         isHawkingModeActive = false;
