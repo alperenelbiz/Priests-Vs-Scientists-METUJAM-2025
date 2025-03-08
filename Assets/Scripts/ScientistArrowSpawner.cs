@@ -17,7 +17,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log("a");
+        
         StartCoroutine(FireArrows());
     }
 
@@ -27,10 +27,10 @@ public class ScientistArrowSpawner : MonoBehaviour
         {
             yield return new WaitForSeconds(fireRate);
             Transform nearestTarget = FindNearestTarget("Papaz");
-            Debug.Log("b");
+           
             if (nearestTarget != null)
             {
-                Debug.Log("c");
+                
                 ShootArrow(nearestTarget);
             }
         }
@@ -78,7 +78,6 @@ public class ScientistArrowSpawner : MonoBehaviour
                 rb.velocity = spaceDirection * shootForce;
                 rb.useGravity = false; // Uzayda yerçekimi olmayacağı için kapat
 
-                Debug.Log("Uzaya ok fırlatıldı! Yön: " + spaceDirection);
             }
             else
             {
@@ -87,7 +86,7 @@ public class ScientistArrowSpawner : MonoBehaviour
                 rb.velocity = launchVelocity;
                 rb.useGravity = true;
 
-                Debug.Log("Eğimli ok fırlatıldı! Hedef: " + target.name + " | Hız: " + rb.velocity);
+                
             }
         }
     }

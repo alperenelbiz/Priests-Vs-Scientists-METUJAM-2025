@@ -18,11 +18,13 @@ public class TimeDilationCard : MonoBehaviour
     {
         if (Input.GetKeyDown(slowKey))
         {
+            Debug.Log("Slow down");
             ApplyEffectToAllEnemies(slowMultiplier, slowDuration);
         }
 
         if (Input.GetKeyDown(boostKey))
         {
+            Debug.Log("Boost");
             ApplyEffectToAllEnemies(boostMultiplier, boostDuration);
         }
     }

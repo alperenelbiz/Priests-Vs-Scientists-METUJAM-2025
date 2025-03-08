@@ -45,7 +45,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => okSaptýr(kart.ad,true)
+            //OnDestroy = (kart) => okSaptýr(kart.ad,true)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -237,6 +237,7 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
+            Debug.Log(kart.ad + " seçildi");
             //CoinUpdate(kart);
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
@@ -246,13 +247,13 @@ public class KartMek : MonoBehaviour
             arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
             Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
-            StartCoroutine(SetSaptirForSeconds(saptir, 5f));
-            Debug.Log(saptir);
+            StartCoroutine(SetSaptirForSeconds(saptir, 0.8f));
+            
         }
 
         Debug.Log(kart.ad + " seçildi");
-        Debug.Log(arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode);
-        arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+        
+        
     }
 
     private IEnumerator SetSaptirForSeconds(bool saptir, float duration)
@@ -262,6 +263,7 @@ public class KartMek : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         saptir = false;
+            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
         Debug.Log("saptir set to false");
     }
 

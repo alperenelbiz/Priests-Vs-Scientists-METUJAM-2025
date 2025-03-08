@@ -44,7 +44,7 @@ public class EnemyMovement : MonoBehaviour
             return;
         }
 
-        Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
+        
 
         // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
@@ -78,11 +78,11 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (var col in colliders)
         {
-            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+            
 
             if (col.CompareTag(enemyTag))
             {
-                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+               
                 enemyNearby = true;
                 break;
             }
@@ -110,7 +110,7 @@ public class EnemyMovement : MonoBehaviour
         float distance = Vector3.Distance(transform.position, targetPosition.position);
         if (distance <= stopThreshold)
         {
-            Debug.Log($"🛑 {gameObject.name} reached its target, stopping.");
+           
             moveTween.Kill();
             moveTween = null;
             TryShootArrow();
@@ -140,7 +140,7 @@ public class EnemyMovement : MonoBehaviour
             ScientistArrowSpawner scientistSpawner = nearestScientist.GetComponent<ScientistArrowSpawner>();
             if (scientistSpawner != null)
             {
-                Debug.Log($"🏹 Scientist {nearestScientist.name} is shooting an arrow at {gameObject.name}");
+               
                 scientistSpawner.ShootArrow(transform); // Make the scientist shoot at this enemy
                 isScientistShooting = true;
             }
@@ -155,7 +155,7 @@ public class EnemyMovement : MonoBehaviour
             if (nearestTarget != null)
             {
                 arrowSpawner.ShootArrow(nearestTarget); // Shoot arrow at nearest scientist
-                Debug.Log($"🏹 {gameObject.name} shot an arrow at {nearestTarget.name}");
+               
                 hasShotArrow = true; // Prevent multiple shots while stopped
             }
         }

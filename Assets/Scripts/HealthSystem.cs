@@ -32,7 +32,7 @@ public class HealthSystem : MonoBehaviour
 
     void Die()
     {
-        Debug.Log(gameObject.name + " öldü!");
+        
         Destroy(gameObject);
     }
 }
