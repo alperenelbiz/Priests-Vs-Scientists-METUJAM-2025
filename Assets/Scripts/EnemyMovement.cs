@@ -6,10 +6,11 @@ using DG.Tweening;
 public class EnemyMovement : MonoBehaviour
 {
     public Transform targetPosition; // Set in Inspector
-    [SerializeField] private float duration = 3f; // Time to reach target
+    [SerializeField] private float moveSpeed = 3f; // Time to reach target
     [SerializeField] private float detectionRadius = 5f; // Detection range
     [SerializeField] private string enemyTag; // Object to detect (e.g., "Scientist" or "Papaz")
     [SerializeField] private float stopThreshold = 0.5f; // Distance to stop at
+    [SerializeField] private Vector3 spawnPoint;
 
     [Header("Movement Boundaries")] 
     [SerializeField] private Vector3 minBounds = new Vector3(-5f, 0f, -5f); // Minimum boundary
@@ -30,6 +31,7 @@ public class EnemyMovement : MonoBehaviour
 
     void Start()
     {
+        spawnPoint = transform.position;
         fixedY = transform.position.y;
         arrowSpawner = GetComponent<PapazArrowSpawner>();
         swordAttack = GetComponent<SwordAttack>();
@@ -44,19 +46,12 @@ public class EnemyMovement : MonoBehaviour
 
     void MoveToTarget()
     {
-        if (targetPosition == null)
-        {
-            //Debug.LogError(gameObject.name + ": Targetposition is missing!");
-            return;
-        }
-        //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
-        
+        if (targetPosition == null) return;
+
         animator.SetBool("isWalking", true);
         animator.SetBool("isAttacking", false);
         hasAttacked = false;
-        //animator.SetBool("isWalking", true);
 
-        // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
         path[0] = transform.position;
         path[1] = ClampToBounds(new Vector3(
@@ -66,13 +61,15 @@ public class EnemyMovement : MonoBehaviour
         ));
         path[2] = ClampToBounds(targetPosition.position);
 
+        float totalDistance = Vector3.Distance(path[0], path[1]) + Vector3.Distance(path[1], path[2]);
+        float duration = totalDistance / moveSpeed;
+
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
-            .SetEase(Ease.InOutQuad)
+            .SetEase(Ease.Linear)
             .OnUpdate(() =>
             {
-                // Make the character look at the target but only rotate on Y-axis
                 Vector3 direction = (targetPosition.position - transform.position).normalized;
-                direction.y = 0f; // Keep Y rotation unchanged
+                direction.y = 0f;
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -87,8 +84,35 @@ public class EnemyMovement : MonoBehaviour
                 TriggerScientistAttack();
                 PerformSwordAttack();
             });
+
         hasShotArrow = false;
         isScientistShooting = false;
+    }
+
+    public void Die()
+    {
+        if (moveTween != null)
+        {
+            moveTween.Kill(); // Stop movement immediately
+            moveTween = null;
+        }
+
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isAttacking", false);
+
+        gameObject.SetActive(false); // Deactivate enemy
+        Invoke(nameof(Respawn), 5f); // Respawn after 5 seconds
+    }
+
+    // 🔄 **Respawn Enemy at Original Location**
+    private void Respawn()
+    {
+        gameObject.SetActive(true); // Reactivate enemy
+        transform.position = spawnPoint; // Reset position
+        hasAttacked = false;
+        isPaused = false;
+
+        MoveToTarget(); // Restart movement
     }
 
     void DetectEnemy()
@@ -291,6 +315,22 @@ public class EnemyMovement : MonoBehaviour
             animator.SetBool("isWalking", true);
         }
     }
+
+    public void ResetMovement()
+{
+    if (moveTween != null)
+    {
+        moveTween.Kill(); // Stop current movement
+        moveTween = null;
+    }
+    
+    isPaused = false;
+    hasShotArrow = false;
+    isScientistShooting = false;
+    hasAttacked = false;
+    
+    transform.position = transform.parent.position; // Reset position to spawn point
+}
 
 
     private void OnDrawGizmosSelected()

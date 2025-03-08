@@ -161,6 +161,10 @@ public class KartMek : MonoBehaviour
     {
         DisplayCards();
     }
+    private void LateUpdate()
+    {
+        if (aktifKartlar.Count == 0) { DisplayCards(); }
+    }
     public void DisplayCards()
     {
 
@@ -281,7 +285,7 @@ public class KartMek : MonoBehaviour
                 }
 
             }
-
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
@@ -316,7 +320,7 @@ public class KartMek : MonoBehaviour
                     spawner.SetArrowSpeedMultiplier(multiplier, duration);
                 }
             }
-
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
@@ -339,7 +343,7 @@ public class KartMek : MonoBehaviour
             Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
             StartCoroutine(SetForSeconds(saptir, 3f, kart));
-
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
@@ -364,7 +368,7 @@ public class KartMek : MonoBehaviour
 
             //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
             priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
-
+            aktifKartlar.Remove(kart);
 
         }
 
@@ -389,6 +393,7 @@ public class KartMek : MonoBehaviour
             // Start the coroutine to handle the saptir bool
             //StartCoroutine(SetForSeconds(saptir, 5f, kart));
             //priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");

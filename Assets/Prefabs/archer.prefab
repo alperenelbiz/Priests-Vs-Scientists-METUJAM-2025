@@ -148,7 +148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6163234641685327462
 Transform:
   m_ObjectHideFlags: 0
@@ -200,7 +200,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e75d7c20a82972d489cdba151f15feec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 100000
+  maxHealth: 100
+  spawner: {fileID: 0}
 --- !u!114 &1018052720448394888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -238,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   targetPosition: {fileID: 0}
-  duration: 10
+  duration: 20
   detectionRadius: 3
   enemyTag: Scientist
   stopThreshold: 0.5
@@ -1236,7 +1237,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fba3e92dd3630e4d9b9767eb62cf6dd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiationParticles: {fileID: 1351713931503753039}
 --- !u!1 &8990492566336289114
 GameObject:
   m_ObjectHideFlags: 0
@@ -1365,11 +1365,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cbed995970cf2f04a99d88c9f386a877, type: 3}
---- !u!198 &1351713931503753039 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 4899735635755235473, guid: cbed995970cf2f04a99d88c9f386a877, type: 3}
-  m_PrefabInstance: {fileID: 5853864989994594270}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &8385315794310265937 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2694203129841111951, guid: cbed995970cf2f04a99d88c9f386a877, type: 3}
