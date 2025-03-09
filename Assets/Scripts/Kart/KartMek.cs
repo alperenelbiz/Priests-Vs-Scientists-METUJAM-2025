@@ -26,7 +26,6 @@ public class KartMek : MonoBehaviour
     public GameObject scientist;
     public GameObject priest;
     List<GameObject> cardObjectList = new List<GameObject>();
-    Currency currency;
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
@@ -161,7 +160,10 @@ public class KartMek : MonoBehaviour
     private void Start()
     {
         DisplayCards();
-        currency = FindObjectOfType<Currency>(); // Currency objesini bul
+    }
+    private void LateUpdate()
+    {
+        if (aktifKartlar.Count == 0) { DisplayCards(); }
     }
     public void DisplayCards()
     {
@@ -283,12 +285,7 @@ public class KartMek : MonoBehaviour
                 }
 
             }
-
-        }
-        
-        if (currency != null)
-        {
-            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
@@ -323,13 +320,9 @@ public class KartMek : MonoBehaviour
                     spawner.SetArrowSpeedMultiplier(multiplier, duration);
                 }
             }
+            aktifKartlar.Remove(kart);
+        }
 
-        }
-        
-        if (currency != null)
-        {
-            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
-        }
         Debug.Log(kart.ad + " seçildi");
 
     }
@@ -350,15 +343,10 @@ public class KartMek : MonoBehaviour
             Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
             StartCoroutine(SetForSeconds(saptir, 3f, kart));
-
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
-        
-        if (currency != null)
-        {
-            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
-        }
 
 
     }
@@ -379,16 +367,12 @@ public class KartMek : MonoBehaviour
             // Start the coroutine to handle the saptir bool
 
             //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
-            priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
-            if (currency != null)
-            {
-                currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
-            }
-
+            //priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
+            aktifKartlar.Remove(kart);
 
         }
 
-
+        Debug.Log(kart.ad + " seçildi");
 
 
     }
@@ -409,6 +393,7 @@ public class KartMek : MonoBehaviour
             // Start the coroutine to handle the saptir bool
             //StartCoroutine(SetForSeconds(saptir, 5f, kart));
             //priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
+            aktifKartlar.Remove(kart);
         }
 
         Debug.Log(kart.ad + " seçildi");
