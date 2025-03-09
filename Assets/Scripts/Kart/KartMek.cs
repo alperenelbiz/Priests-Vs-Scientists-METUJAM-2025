@@ -250,10 +250,7 @@ public class KartMek : MonoBehaviour
             {
                 // Kartın kalan adetini kontrol et
 
-                if (kart.kalanAdet == 0)
-                {
-                    kart.aktiflik = false;
-                }
+               
                 return kart;
             }
         }
@@ -296,11 +293,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log(kart.ad + " seçildi");
 
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
 
             // **Belirtilen Tag'e Sahip Karakterleri Bul**
             SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
@@ -360,11 +353,7 @@ public class KartMek : MonoBehaviour
         if (kart != null)
         {
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
             if (targetTag == "Scientist")
             {
                 Debug.Log("Applying arrow speed effect to Scientists");
@@ -398,11 +387,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log($"🎴 Kart Kullanıldı: {kart.ad}");
 
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+           
 
             // **1️⃣ SADECE "Scientist" TAG'İNE SAHİP OLAN RANGED ASKERLERİ BUL VE SPACE MODE'U AÇ**
             SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
@@ -444,11 +429,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log(kart.ad + " seçildi");
 
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
 
             // **SADECE "Priest" TAG'İNE SAHİP RANGED ASKERLERİ BUL VE MODU AKTİF ET**
             SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
@@ -475,11 +456,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log($"🕳️ Kara Delik Kartı Kullanıldı: {kart.ad}");
 
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+           
 
             // **1️⃣ Kara Delik Nesnesini Spawn Et**
             Vector3 spawnPosition = new Vector3(0, 0, 0); // Kara delik konumu (İsteğe bağlı değiştirebilirsin)

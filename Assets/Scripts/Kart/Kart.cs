@@ -8,7 +8,7 @@ public class Kart
     public string ad { get; set; } = string.Empty;
     public string aciklama { get; set; } = string.Empty;
     public bool aktiflik { get; set; } = true;
-    public int kalanAdet { get; set; } = 0;
+   
     public int indeks { get; set; } = 0;
     public float olasilik { get; set; }
     public int minLevel { get; set; }
