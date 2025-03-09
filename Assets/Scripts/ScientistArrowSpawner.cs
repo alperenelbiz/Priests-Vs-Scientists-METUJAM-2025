@@ -7,8 +7,6 @@ public class ScientistArrowSpawner : MonoBehaviour
     public float fireRate = 2f;
     public float shootForce = 10f;
     public bool isSpaceMode = false;
-    public float minDistancetoAttack = 7f;
-    private float arrowSpeedMultiplier = 1f;
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -19,7 +17,7 @@ public class ScientistArrowSpawner : MonoBehaviour
     }
     void Start()
     {
-        Debug.Log("a");
+        
         StartCoroutine(FireArrows());
     }
 
@@ -27,12 +25,12 @@ public class ScientistArrowSpawner : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(fireRate*arrowSpeedMultiplier);
+            yield return new WaitForSeconds(fireRate);
             Transform nearestTarget = FindNearestTarget("Papaz");
-            Debug.Log("b");
+           
             if (nearestTarget != null)
             {
-                Debug.Log("c");
+                
                 ShootArrow(nearestTarget);
             }
         }
@@ -42,14 +40,14 @@ public class ScientistArrowSpawner : MonoBehaviour
     {
         GameObject[] targets = GameObject.FindGameObjectsWithTag(enemyTag);
         Transform nearestTarget = null;
-        float minDistance = Mathf.Infinity;
+        float minDistance = 7f;
 
         foreach (GameObject target in targets)
         {
             if (target.transform == transform) continue; // Kendisini hedef almamasını sağlar
 
             float distance = Vector3.Distance(transform.position, target.transform.position);
-            if (distance < minDistance && distance < minDistancetoAttack)
+            if (distance < minDistance)
             {
                 minDistance = distance;
                 nearestTarget = target.transform;
@@ -57,18 +55,7 @@ public class ScientistArrowSpawner : MonoBehaviour
         }
         return nearestTarget;
     }
-    
-    public void SetArrowSpeedMultiplier(float multiplier, float duration)
-    {
-        arrowSpeedMultiplier = multiplier;
-        StartCoroutine(ResetArrowSpeed(duration));
-    }
 
-    IEnumerator ResetArrowSpeed(float duration)
-    {
-        yield return new WaitForSeconds(duration);
-        arrowSpeedMultiplier = 1f;
-    }
 
     public void ShootArrow(Transform target)
     {
@@ -91,7 +78,6 @@ public class ScientistArrowSpawner : MonoBehaviour
                 rb.velocity = spaceDirection * shootForce;
                 rb.useGravity = false; // Uzayda yerçekimi olmayacağı için kapat
 
-                Debug.Log("Uzaya ok fırlatıldı! Yön: " + spaceDirection);
             }
             else
             {
@@ -100,7 +86,7 @@ public class ScientistArrowSpawner : MonoBehaviour
                 rb.velocity = launchVelocity;
                 rb.useGravity = true;
 
-                Debug.Log("Eğimli ok fırlatıldı! Hedef: " + target.name + " | Hız: " + rb.velocity);
+                
             }
         }
     }

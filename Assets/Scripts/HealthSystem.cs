@@ -8,8 +8,6 @@ public class HealthSystem : MonoBehaviour
     public float maxHealth = 100f;
     private float currentHealth;
 
-    public EnemySpawner spawner;
-
     void Start()
     {
         currentHealth = maxHealth;
@@ -18,7 +16,7 @@ public class HealthSystem : MonoBehaviour
     public void TakeDamage(float damage)
     {
         currentHealth -= damage;
-        Debug.Log(gameObject.name + " hasar aldý! Yeni Can: " + currentHealth);
+        
 
         if (currentHealth <= 0)
         {
@@ -34,12 +32,7 @@ public class HealthSystem : MonoBehaviour
 
     void Die()
     {
-        Debug.Log(gameObject.name + " öldü!");
-        spawner.OnEnemyDeath(gameObject);
-    }
-
-    public void ResetHealth()
-    {
-        currentHealth = maxHealth; // Reset health to full
+        
+        Destroy(gameObject);
     }
 }

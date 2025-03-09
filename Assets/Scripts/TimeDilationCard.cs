@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class TimeDilationCard : MonoBehaviour
@@ -10,61 +9,33 @@ public class TimeDilationCard : MonoBehaviour
     [Header("Speed Boost Settings")]
     [SerializeField] private float boostDuration = 3f; // Duration of speed boost
     [SerializeField] private float boostMultiplier = 1.5f; // Increases speed (1.5 = 50% faster)
-    
+
+    [Header("Key Bindings")]
+    [SerializeField] private KeyCode slowKey = KeyCode.T; // Press 'T' to slow down enemies
+    [SerializeField] private KeyCode boostKey = KeyCode.Y; // Press 'Y' to speed up enemies
+
     void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.T) )
+        if (Input.GetKeyDown(slowKey))
         {
-            print("Pressed slow key");
-            ApplyEffectToAllEnemies(slowMultiplier, slowDuration, "Scientist");
-            ApplyArrowSpeedEffect(slowMultiplier, slowDuration, "Scientist");
-
+            Debug.Log("Slow down");
+            ApplyEffectToAllEnemies(slowMultiplier, slowDuration);
         }
 
-        if (Input.GetKeyDown(KeyCode.Y))
+        if (Input.GetKeyDown(boostKey))
         {
-            print("Pressed boost key");
-            ApplyEffectToAllEnemies(boostMultiplier, boostDuration, "Papaz");
-            ApplyArrowSpeedEffect(boostMultiplier, boostDuration, "Papaz");
+            Debug.Log("Boost");
+            ApplyEffectToAllEnemies(boostMultiplier, boostDuration);
         }
     }
 
-    private void ApplyEffectToAllEnemies(float multiplier, float duration, string targetTag)
+    private void ApplyEffectToAllEnemies(float multiplier, float duration)
     {
         EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
 
         foreach (var enemy in enemies)
         {
-            if (enemy.CompareTag(targetTag))
-            {
-                //Debug.Log($"✅ Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
-                enemy.ApplySpeedEffect(multiplier, duration);
-            }
-                
+            enemy.ApplySpeedEffect(multiplier, duration);
         }
     }
-    
-    private void ApplyArrowSpeedEffect(float multiplier, float duration, string targetTag)
-    {
-        if (targetTag == "Scientist")
-        {
-            Debug.Log("Applying arrow speed effect to Scientists");
-            ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
-            foreach (var spawner in scientistSpawners)
-            {
-                spawner.SetArrowSpeedMultiplier(multiplier, duration);
-            }
-        }
-        else if (targetTag == "Papaz")
-        {
-            Debug.Log("Applying arrow speed effect to Papaz");
-            PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
-            foreach (var spawner in papazSpawners)
-            {
-                spawner.SetArrowSpeedMultiplier(multiplier, duration);
-            }
-        }
-    }
-    
 }

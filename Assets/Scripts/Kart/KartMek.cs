@@ -1,10 +1,11 @@
-ï»¿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -16,173 +17,143 @@ using Image = UnityEngine.UI.Image;
 using Random = UnityEngine.Random;
 public class KartMek : MonoBehaviour
 {
-    public GameObject cardBack;
+    public GameObject cardBack; 
     GameObject eventSystem;
     public List<Kart> kartListesi = new List<Kart>();
     private List<Kart> aktifKartlar = new List<Kart>();
     //LevelControl levelControl;
     [SerializeField] public List<Transform> Coordinates = new List<Transform>();
 
-    public List<GameObject> scientist;
-    public List<GameObject> priest;
+    public GameObject arrow;
     List<GameObject> cardObjectList = new List<GameObject>();
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
+    
+    
+    public List<GameObject> placementAreas = new List<GameObject>();
+    public TurretFollow turretCursor;
+
     void Awake()
     {
 
         eventSystem = GameObject.Find("Event System");
         //levelControl = eventSystem.GetComponent<LevelControl>();
 
-        Kart radyasyonKartÄ±OluÅŸtur = new()
+        Kart radyasyonKartıOluştur = new()
         {
             ad = "RADYASYON",
             aciklama = "Radyasyon yay",
             aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+
+            cost = 2,
+            //OnDestroy = (kart) => okSaptır(kart.ad,true)
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+        
+        kartListesi.Add(radyasyonKartıOluştur);
+        Kart okSaptırKartıOluştur = new()
+        {
+            ad = "Ok saptır",
+            aciklama = "Okun yönünü saptır",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+
+            cost = 2,
+            OnDestroy = (kart) => okSaptır(kart.ad, true)
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+
+        kartListesi.Add(okSaptırKartıOluştur);
+
+        Kart hızlandırmaKartıOluştur = new()
+        {
+            ad = "Zamanı Hızlandır",
+            aciklama = "Ben hızım",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
+            cost = 2,
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
+            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+
+        };
+       
+        kartListesi.Add(hızlandırmaKartıOluştur);
+
+        Kart yavaşlatmaKartıOluştur = new()
+        {
+            ad = "Yavaşlat",
+            aciklama = "Ben hız değilim",
+            aktiflik = true,
+            kalanAdet = 3,
+            olasilik = 0.5f,
+            minLevel = 1,
+            maxLevel = 21,
            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
-
             cost = 2,
-            OnDestroy = (kart) => radyasyon(kart.ad, true)
+            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f)
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(radyasyonKartÄ±OluÅŸtur);
-        Kart okSaptÄ±rKartÄ±OluÅŸtur = new()
+        kartListesi.Add(yavaşlatmaKartıOluştur);
+
+        GameObject prefabForCard;
+        Kart turretKartıOluştur = new()
         {
-            ad = "Ok saptÄ±r",
-            aciklama = "Okun yÃ¶nÃ¼nÃ¼ saptÄ±r",
+            ad = "Turret",
+            aciklama = "Turret koy",
             aktiflik = true,
-            
+            kalanAdet = 3,
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
-
-            cost = 2,
-            OnDestroy = (kart) => okSaptÄ±r(kart.ad, true)
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
-
-        };
-
-        kartListesi.Add(okSaptÄ±rKartÄ±OluÅŸtur);
-        Kart karaDelikOluÅŸtur = new()
-        {
-            ad = "Kara delik",
-            aciklama = "blackniga",
-            aktiflik = true,
-            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
-
-            cost = 2,
-            OnDestroy = (kart) => karaDelik(kart.ad, true)
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
-
-        };
-
-        kartListesi.Add(karaDelikOluÅŸtur);
-
-        Kart hÄ±zlandÄ±rmaKartÄ±OluÅŸtur = new()
-        {
-            ad = "ZamanÄ± HÄ±zlandÄ±r",
-            aciklama = "Ben hÄ±zÄ±m",
-            aktiflik = true,
-            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
-            cost = 2,
-            OnDestroy = (kart) => MovementDelay(kart.ad, 2.0f, 5.0f, "Papaz")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
-
-        };
-
-        kartListesi.Add(hÄ±zlandÄ±rmaKartÄ±OluÅŸtur);
-
-        Kart yavaÅŸlatmaKartÄ±OluÅŸtur = new()
-        {
-            ad = "YavaÅŸlat",
-            aciklama = "Ben hÄ±z deÄŸilim",
-            aktiflik = true,
            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => MovementDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            OnDestroy = (kart) => TurretKoy()
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
 
-        kartListesi.Add(yavaÅŸlatmaKartÄ±OluÅŸtur);
-        Kart okYavaÅŸlatmaKartÄ±OluÅŸtur = new()
-        {
-            ad = "Ok yavaslat",
-            aciklama = "Ben hÄ±z deÄŸilim",
-            aktiflik = true,
-            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
+        kartListesi.Add(turretKartıOluştur);
 
-            cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 2f, 5.0f, "Scientist")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
-
-        };
-
-        kartListesi.Add(okYavaÅŸlatmaKartÄ±OluÅŸtur);
-        Kart okHÄ±zlandÄ±rmaKartÄ±OluÅŸtur = new()
-        {
-            ad = " Ok Hizlandir",
-            aciklama = "Ben hÄ±z deÄŸilim",
-            aktiflik = true,
-            
-            olasilik = 0.5f,
-            minLevel = 1,
-            maxLevel = 21,
-
-            cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 0.5f, 5.0f, "Papaz")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
-
-        };
-
-        kartListesi.Add(okHÄ±zlandÄ±rmaKartÄ±OluÅŸtur);
 
     }
     private void Start()
     {
         DisplayCards();
     }
-    private void Update()
-    {
-        if (aktifKartlar.Count == 0) { DisplayCards(); }
-    }
     public void DisplayCards()
     {
-
+        
         foreach (var item in cardObjectList)
         {
             Destroy(item);
         }
         aktifKartlar.Clear();
 
-        List<int> kullanilanIndexler = new List<int>(); // KullanÄ±lan kart indekslerini tutmak iÃ§in liste
+        List<int> kullanilanIndexler = new List<int>(); // Kullanılan kart indekslerini tutmak için liste
 
         for (int i = 0; i < Coordinates.Count; i++)
         {
-            // KartÄ± Instantiate et ve gerekli Ã¶zellikleri ayarla
+            // Kartı Instantiate et ve gerekli özellikleri ayarla
             Kart secilenKart = SecilenKartiGetir(kullanilanIndexler);
             GameObject cardObject = Instantiate(cardBack, Coordinates[i].position, Quaternion.identity, gameObject.transform);
-            // cardObject.transform.SetParent(Coordinates[i]);
-
+           // cardObject.transform.SetParent(Coordinates[i]);
+            
             cardObjectList.Add(cardObject);
 
             CardController cardController = cardObject.AddComponent<CardController>();
@@ -190,33 +161,33 @@ public class KartMek : MonoBehaviour
 
             if (secilenKart == null)
             {
-                continue; // DiÄŸer Kartlara geÃ§
+                continue; // Diğer Kartlara geç
             }
             TextMeshProUGUI[] textBox = cardObject.GetComponentsInChildren<TextMeshProUGUI>();
             if (textBox.Length >= 2)
             {
-                textBox[0].text = secilenKart.ad; // Ä°lk(Title) TextBox'Ä± doldur
-                textBox[1].text = secilenKart.aciklama; // Ä°kinci(Description) TextBox'Ä± doldur
-                textBox[2].text = secilenKart.cost.ToString(); // ÃœÃ§Ã¼cÃ¼ncÃ¼(Cost) TextBox'Ä± doldur
+                textBox[0].text = secilenKart.ad; // İlk(Title) TextBox'ı doldur
+                textBox[1].text = secilenKart.aciklama; // İkinci(Description) TextBox'ı doldur
+                textBox[2].text = secilenKart.cost.ToString(); // Üçücüncü(Cost) TextBox'ı doldur
             }
             else
             {
-                Debug.Log("TextBoxlar bulunamadÄ±!");
+                Debug.Log("TextBoxlar bulunamadı!");
             }
 
             Image[] image = cardObject.GetComponentsInChildren<Image>();
             if (image.Length >= 2)
             {
-                image[1].sprite = secilenKart.gorsel; // Ä°lk(Title) TextBox'Ä± doldur
+                image[1].sprite = secilenKart.gorsel; // İlk(Title) TextBox'ı doldur
             }
             else
             {
-                Debug.Log("TextBoxlar bulunamadÄ±!");
+                Debug.Log("TextBoxlar bulunamadı!");
             }
-            // SeÃ§ilen kartÄ± aktif kartlara ekle
+            // Seçilen kartı aktif kartlara ekle
             aktifKartlar.Add(secilenKart);
             kullanilanIndexler.Add(secilenKart.indeks);
-
+           
         }
     }
     Kart SecilenKartiGetir(List<int> kullanilanIndexler)
@@ -225,7 +196,7 @@ public class KartMek : MonoBehaviour
 
         foreach (Kart kart in kartListesi)
         {
-            if (kart.aktiflik&& !kullanilanIndexler.Contains(kart.indeks))
+            if (kart.aktiflik && kart.kalanAdet > 0 && !kullanilanIndexler.Contains(kart.indeks))
             {
                 kullanilabilirKartlar.Add(kart);
             }
@@ -233,16 +204,16 @@ public class KartMek : MonoBehaviour
 
         if (kullanilabilirKartlar.Count == 0)
         {
-            return null; // KullanÄ±labilir kart yoksa null dÃ¶ndÃ¼r
+            return null; // Kullanılabilir kart yoksa null döndür
         }
-        // KartlarÄ±n olasÄ±lÄ±klarÄ±nÄ± hesapla
+        // Kartların olasılıklarını hesapla
         float toplamOlasilik = 0f;
         foreach (Kart kart in kullanilabilirKartlar)
         {
             toplamOlasilik += kart.olasilik;
         }
 
-        // Rastgele bir olasÄ±lÄ±k deÄŸeri seÃ§
+        // Rastgele bir olasılık değeri seç
         float rastgeleOlasilik = Random.Range(0f, toplamOlasilik);
 
         float toplam = 0f;
@@ -251,7 +222,7 @@ public class KartMek : MonoBehaviour
             toplam += kart.olasilik;
             if (rastgeleOlasilik <= toplam)
             {
-                // KartÄ±n kalan adetini kontrol et
+                // Kartın kalan adetini kontrol et
 
                 if (kart.kalanAdet == 0)
                 {
@@ -263,101 +234,7 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    //void ZamanDelay(string name, float multiplier, float duration, string targetTag) // asker Ã¶zellikleri arttÄ±r!!!!
-    //{
-    //    Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
-    //    if (kart != null)
-    //    {
-    //        //CoinUpdate(kart);
-    //        kart.kalanAdet--;
-    //        if (kart.kalanAdet == 0)
-    //        {
-    //            kart.aktiflik = false;
-    //        }
-    //        EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
-
-    //        foreach (var enemy in enemies)
-    //        {
-    //            if (enemy.CompareTag(targetTag))
-    //            {
-    //                //Debug.Log($"âœ… Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
-    //                enemy.ApplySpeedEffect(multiplier, duration);
-    //            }
-
-    //        }
-    //        aktifKartlar.Remove(kart);
-    //    }
-
-    //    Debug.Log(kart.ad + " seÃ§ildi");
-
-    //}
-
-    void MovementDelay(string name, float multiplier, float duration, string targetTag)
-    {
-        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
-        if (kart != null)
-        {
-            Debug.Log(kart.ad + " seÃ§ildi");
-
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
-
-            // **Belirtilen Tag'e Sahip Karakterleri Bul**
-            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
-            foreach (SoldierAI soldier in allSoldiers)
-            {
-                if (soldier.CompareTag(targetTag)) // ğŸ”¥ SADECE belirtilen TAG'e sahip karakterleri etkilesin
-                {
-                    soldier.ApplySpeedEffect(multiplier, duration); // âš¡ HÄ±z deÄŸiÅŸtir
-                    Debug.Log(soldier.name + " hÄ±z Ã§arpanÄ± uygulandÄ±: " + multiplier);
-                }
-            }
-
-            aktifKartlar.Remove(kart);
-        }
-    }
-
-
-
-    //void OkDelay(string name, float multiplier, float duration, string targetTag) // asker Ã¶zellikleri arttÄ±r!!!!
-    //{
-    //    Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
-    //    if (kart != null)
-    //    {
-    //        //CoinUpdate(kart);
-    //        kart.kalanAdet--;
-    //        if (kart.kalanAdet == 0)
-    //        {
-    //            kart.aktiflik = false;
-    //        }
-    //        if (targetTag == "Scientist")
-    //        {
-    //            Debug.Log("Applying arrow speed effect to Scientists");
-    //            ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
-    //            foreach (var spawner in scientistSpawners)
-    //            {
-    //                spawner.SetArrowSpeedMultiplier(multiplier, duration);
-    //            }
-    //        }
-    //        else if (targetTag == "Papaz")
-    //        {
-    //            Debug.Log("Applying arrow speed effect to Papaz");
-    //            PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
-    //            foreach (var spawner in papazSpawners)
-    //            {
-    //                spawner.SetArrowSpeedMultiplier(multiplier, duration);
-    //            }
-    //        }
-    //        aktifKartlar.Remove(kart);
-    //    }
-
-    //    Debug.Log(kart.ad + " seÃ§ildi");
-
-    //}
-    void OkDelay(string name, float multiplier, float duration, string targetTag) // asker Ã¶zellikleri arttÄ±r!!!!
+    void ZamanDelay(string name, float multiplier, float duration) // asker özellikleri arttır!!!!
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
@@ -368,161 +245,62 @@ public class KartMek : MonoBehaviour
             {
                 kart.aktiflik = false;
             }
-            if (targetTag == "Scientist")
+            EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
+
+            foreach (var enemy in enemies)
             {
-                Debug.Log("Applying arrow speed effect to Scientists");
-                ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
-                foreach (var spawner in scientistSpawners)
-                {
-                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
-                }
+                enemy.ApplySpeedEffect(multiplier, duration);
             }
-            else if (targetTag == "Papaz")
-            {
-                Debug.Log("Applying arrow speed effect to Papaz");
-                PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
-                foreach (var spawner in papazSpawners)
-                {
-                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
-                }
-            }
-            aktifKartlar.Remove(kart);
+
+        }
+        
+        Debug.Log(kart.ad + " seçildi");
         }
 
-        Debug.Log(kart.ad + " seÃ§ildi");
+    void TurretKoy()
+    {
+
+        turretCursor.gameObject.SetActive(true);
+
+        foreach (var area in placementAreas)
+        {
+            area.SetActive(true);
+        }
 
     }
 
-    void okSaptÄ±r(string name, bool saptir)
+    void okSaptır(string name,bool saptir)
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log($"ğŸ´ Kart KullanÄ±ldÄ±: {kart.ad}");
-
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
-
-            // **1ï¸âƒ£ SADECE "Scientist" TAG'Ä°NE SAHÄ°P OLAN RANGED ASKERLERÄ° BUL VE SPACE MODE'U AÃ‡**
-            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
-            foreach (SoldierAI soldier in allSoldiers)
-            {
-                if (soldier.soldierType == SoldierAI.SoldierType.Ranged && soldier.CompareTag("Scientist"))
-                {
-                    soldier.isSpaceMode = true; // ğŸ”¥ Space Mode AÃ‡
-                    Debug.Log($"âœ… {soldier.name} iÃ§in Space Mode AKTÄ°F");
-                }
-            }
-
-            // **2ï¸âƒ£ Belirtilen sÃ¼re sonra hepsini kapat**
-            StartCoroutine(DisableSpaceModeAfter(3f)); // 3 saniye sonra kapat
-
-            aktifKartlar.Remove(kart);
-        }
-    }
-    IEnumerator DisableSpaceModeAfter(float duration)
-    {
-        yield return new WaitForSeconds(duration); // â³ SÃ¼re kadar bekle
-
-        // **Sahnede olan tÃ¼m askerleri bul ve Space Mode'u kapat**
-        SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
-        foreach (SoldierAI soldier in allSoldiers)
-        {
-            soldier.isSpaceMode = false; // âŒ Space Mode KAPAT
-            Debug.Log($"ğŸ›‘ {soldier.name} iÃ§in Space Mode KAPANDI");
-        }
-    }
-
-
-
-
-    void radyasyon(string name, bool saptir)
-    {
-        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
-        if (kart != null)
-        {
-            Debug.Log(kart.ad + " seÃ§ildi");
-
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
-
-            // **SADECE "Priest" TAG'Ä°NE SAHÄ°P RANGED ASKERLERÄ° BUL VE MODU AKTÄ°F ET**
-            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
-            foreach (SoldierAI soldier in allSoldiers)
-            {
-                if (soldier.CompareTag("Papaz"))
-                {
-                    soldier.ActivateMarieCurieMode(); // â˜¢ï¸ **Marie Curie Modu AÃ§Ä±lÄ±yor**
-                    Debug.Log(soldier.name + " iÃ§in Marie Curie Mode AKTÄ°F (Sadece Priest)");
-                }
-            }
-
-            // **Belirli sÃ¼re sonra tekrar kapat**
-            StartCoroutine(SetForSeconds(saptir, 3f, kart));
-
-            aktifKartlar.Remove(kart);
-        }
-    }
-
-    void karaDelik(string name, bool saptir)
-    {
-        Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
-        if (kart != null)
-        {
-            Debug.Log(kart.ad + " seÃ§ildi");
+            Debug.Log(kart.ad + " seçildi");
             //CoinUpdate(kart);
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
             {
                 kart.aktiflik = false;
             }
-            //priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
-            //Debug.Log(saptir);
+            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
-            //StartCoroutine(SetForSeconds(saptir, 5f, kart));
-            //priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
-            aktifKartlar.Remove(kart);
+            StartCoroutine(SetSaptirForSeconds(saptir, 0.8f));
+            
         }
 
-        Debug.Log(kart.ad + " seÃ§ildi");
-
-
+        Debug.Log(kart.ad + " seçildi");
+        
+        
     }
-    private IEnumerator SetForSeconds(bool saptir, float duration, Kart kart)
-    {
 
+    private IEnumerator SetSaptirForSeconds(bool saptir, float duration)
+    {
+        
 
         yield return new WaitForSeconds(duration);
 
         saptir = false;
-        if (kart.ad == "RADYASYON")
-        {
-            foreach(GameObject pri in priest)
-            {
-                pri.GetComponent<SoldierAI>().isMarieCurieModeActive = saptir;
-            }
-            
-        }
-        else if (kart.ad == "Ok saptÄ±r")
-        {
-           foreach(GameObject sci in scientist)
-            {
-                sci.GetComponent<SoldierAI>().isSpaceMode = saptir;
-            }            
-        }
-            
-        else
-            foreach(GameObject pri in priest)
-            {
-                pri.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
-            }
-            
+            arrow.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
         Debug.Log("saptir set to false");
     }
 
