@@ -15,7 +15,7 @@ public class SoldierAI : MonoBehaviour
     public float attackCooldown = 1f;
     public int health = 100;
     public int damage = 10;
-    public bool isSpaceMode=false;
+
     public GameObject projectilePrefab; // Ranged askerlerin attýðý ok prefabý
     public Transform firePoint; // Okun fýrlatýlacaðý nokta
     public float projectileSpeed = 15f; // Ok hýzý ayarlanabilir
@@ -88,7 +88,7 @@ public class SoldierAI : MonoBehaviour
         {
             agent.isStopped = true;
             animator.SetBool("isWalking", false);
-           
+            Debug.Log(name + " is attacking " + currentEnemy.name);
             Attack();
         }
         else
@@ -96,7 +96,7 @@ public class SoldierAI : MonoBehaviour
             agent.isStopped = false;
             agent.SetDestination(currentEnemy.position);
             animator.SetBool("isWalking", true);
-            
+            Debug.Log(name + " is moving towards " + currentEnemy.name);
         }
     }
 
@@ -141,8 +141,6 @@ public class SoldierAI : MonoBehaviour
             {
                 Projectile projectileScript = projectile.AddComponent<Projectile>();
                 projectileScript.SetDamage(damage);
-                
-              
                 projectileScript.SetFaction(soldierFaction);
                 projectileScript.Launch(currentEnemy.position, projectileSpeed);
                 Debug.Log(name + " fired a projectile at " + currentEnemy.name);
@@ -173,7 +171,6 @@ public class SoldierAI : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-   
 }
 
 public class Projectile : MonoBehaviour
