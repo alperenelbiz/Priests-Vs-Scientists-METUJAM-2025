@@ -37,7 +37,7 @@ RenderSettings:
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
-  m_Sun: {fileID: 0}
+  m_Sun: {fileID: 1366136265}
   m_IndirectSpecularColor: {r: 0.5398445, g: 0.6167105, b: 0.74652267, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -2311,7 +2311,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1846550673}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d050636e9c53294e9317777daf587b0, type: 3}
+  m_Script: {fileID: 11500000, guid: b1a970998ed44194db9247c81376a2d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1874275401
@@ -2523,6 +2523,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1958501830}
   m_CullTransparentMesh: 1
+--- !u!1 &2005232999
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2005233001}
+  - component: {fileID: 2005233000}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2005233000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005232999}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1a970998ed44194db9247c81376a2d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &2005233001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2005232999}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 312.23212, y: 199.12016, z: -24.802103}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2038615100
 GameObject:
   m_ObjectHideFlags: 0
@@ -2833,6 +2877,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1628145487230554687, guid: 7c78c6d21827de247a49014ddd7ecee9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.047
+      objectReference: {fileID: 0}
+    - target: {fileID: 1628145487230554687, guid: 7c78c6d21827de247a49014ddd7ecee9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.014
+      objectReference: {fileID: 0}
     - target: {fileID: 4525540937185247587, guid: 7c78c6d21827de247a49014ddd7ecee9, type: 3}
       propertyPath: m_Name
       value: ChurchMenu
@@ -2894,6 +2946,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8143462357535239250, guid: 36daad52f6a1ff44b817f1e92c3b4ad7, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143462357535239250, guid: 36daad52f6a1ff44b817f1e92c3b4ad7, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.33
+      objectReference: {fileID: 0}
+    - target: {fileID: 8143462357535239250, guid: 36daad52f6a1ff44b817f1e92c3b4ad7, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.33
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2910,3 +2974,4 @@ SceneRoots:
   - {fileID: 1610772086028432716}
   - {fileID: 7159348054151883642}
   - {fileID: 2139888886}
+  - {fileID: 2005233001}

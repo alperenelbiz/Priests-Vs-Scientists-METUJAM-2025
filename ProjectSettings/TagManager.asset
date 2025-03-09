@@ -11,6 +11,9 @@ TagManager:
   - Papaz
   - Scientist
   - Arrow
+  - Church
+  - Lab
+  - BlackHole
   layers:
   - Default
   - TransparentFX

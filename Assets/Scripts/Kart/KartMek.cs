@@ -9,7 +9,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
-using UnityEngine.WSA;
 using Button = UnityEngine.UI.Button;
 using Cursor = UnityEngine.Cursor;
 using Image = UnityEngine.UI.Image;
@@ -454,44 +453,40 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log($"🕳️ Kara Delik Kartı Kullanıldı: {kart.ad}");
+            Debug.Log(kart.ad + " seçildi");
 
-           
+            // **SADECE "Scientist" TAG'İNE SAHİP ASKERLERİ BUL VE "Hawking Mode" AKTİF ET**
+            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+            foreach (SoldierAI soldier in allSoldiers)
+            {
+                if (soldier.CompareTag("Papaz"))
+                {
+                    soldier.ActivateHawkingMode(); // 🌀 **Hawking Mode Açılıyor**
+                    Debug.Log(soldier.name + " için Hawking Mode AKTİF (Sadece Scientist)");
+                }
+            }
 
-            // **1️⃣ Kara Delik Nesnesini Spawn Et**
-            Vector3 spawnPosition = new Vector3(0, 0, 0); // Kara delik konumu (İsteğe bağlı değiştirebilirsin)
-           // GameObject karadelik = Instantiate(karadelikPrefab, spawnPosition, Quaternion.identity);
-            Debug.Log($"🛠️ Kara Delik {spawnPosition} konumunda oluşturuldu.");
-
-            // **2️⃣ Belirli bir süre boyunca ekstra "Priest" spawnlamayı etkinleştir**
-            StartCoroutine(EnableExtraPriestSpawning(5f)); // 5 saniye boyunca aktif kalacak
-
-            // **3️⃣ Belirli Süre Sonra Kara Deliği Yok Et**
-            // Destroy(karadelik, 5f); // Kara delik 5 saniye sonra yok olacak
+            // **Belirli süre sonra tekrar kapat**
+            StartCoroutine(DisableHawkingModeAfter(3f)); // 3 saniye sonra kapat
             currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
 
     }
-    IEnumerator EnableExtraPriestSpawning(float duration)
+    IEnumerator DisableHawkingModeAfter(float duration)
     {
-        SoldierSpawner[] allSpawners = FindObjectsOfType<SoldierSpawner>();
-
-        foreach (SoldierSpawner spawner in allSpawners)
-        {
-           // spawner.EnablePriestBoost(true); // Priest spawn boost aktif
-        }
-
-        Debug.Log("⏳ Priest spawn artırıldı!");
-
         yield return new WaitForSeconds(duration);
 
-        foreach (SoldierSpawner spawner in allSpawners)
+        // **Sahnede olan tüm "Scientist" askerleri bul ve "Hawking Mode" kapat**
+        SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+        foreach (SoldierAI soldier in allSoldiers)
         {
-            //spawner.EnablePriestBoost(false); // Priest spawn boost devre dışı
+            if (soldier.CompareTag("Papaz"))
+            {
+                soldier.DeactivateHawkingMode(); // ❌ **Hawking Mode Kapatılıyor**
+                Debug.Log($"🛑 {soldier.name} için Hawking Mode KAPANDI");
+            }
         }
-
-        Debug.Log("🛑 Priest spawn boost sona erdi.");
     }
 
     private IEnumerator SetForSeconds(bool saptir, float duration, Kart kart)

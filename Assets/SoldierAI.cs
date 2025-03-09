@@ -36,7 +36,7 @@ public class SoldierAI : MonoBehaviour
 
     private float speedMultiplier = 1f;
     public float soldierSpeed;
-
+    public bool isHawkingModeActive = false;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -303,6 +303,18 @@ public class SoldierAI : MonoBehaviour
         {
             Die();
         }
+    }
+    public void ActivateHawkingMode()
+    {
+        isHawkingModeActive = true;
+        // Burada özel efektler / hız değişikliği ekleyebilirsin.
+        Debug.Log(name + " Hawking Mode'a girdi! 🌀");
+    }
+
+    public void DeactivateHawkingMode()
+    {
+        isHawkingModeActive = false;
+        Debug.Log(name + " Hawking Mode'dan çıktı! 🛑");
     }
 
     void Die()
