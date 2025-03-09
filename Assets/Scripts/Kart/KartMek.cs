@@ -26,6 +26,7 @@ public class KartMek : MonoBehaviour
     public GameObject scientist;
     public GameObject priest;
     List<GameObject> cardObjectList = new List<GameObject>();
+    Currency currency;
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
@@ -160,6 +161,7 @@ public class KartMek : MonoBehaviour
     private void Start()
     {
         DisplayCards();
+        currency = FindObjectOfType<Currency>(); // Currency objesini bul
     }
     public void DisplayCards()
     {
@@ -283,6 +285,11 @@ public class KartMek : MonoBehaviour
             }
 
         }
+        
+        if (currency != null)
+        {
+            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
+        }
 
         Debug.Log(kart.ad + " seçildi");
 
@@ -318,7 +325,11 @@ public class KartMek : MonoBehaviour
             }
 
         }
-
+        
+        if (currency != null)
+        {
+            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
+        }
         Debug.Log(kart.ad + " seçildi");
 
     }
@@ -343,6 +354,11 @@ public class KartMek : MonoBehaviour
         }
 
         Debug.Log(kart.ad + " seçildi");
+        
+        if (currency != null)
+        {
+            currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
+        }
 
 
     }
@@ -364,11 +380,15 @@ public class KartMek : MonoBehaviour
 
             //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
             priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
+            if (currency != null)
+            {
+                currency.SpendCurrency(100); // -100 yerine düzgün bir şekilde harcama yap
+            }
 
 
         }
 
-        Debug.Log(kart.ad + " seçildi");
+
 
 
     }
