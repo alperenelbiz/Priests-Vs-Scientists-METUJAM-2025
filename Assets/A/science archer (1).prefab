@@ -9,11 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4654290549637977861}
-  - component: {fileID: 8267862318731425061}
-  - component: {fileID: 3880717336598426458}
-  - component: {fileID: 5279576690503675095}
   - component: {fileID: 8957625555123118283}
   - component: {fileID: 8295635621834874818}
+  - component: {fileID: 2297977712723853506}
   m_Layer: 0
   m_Name: science archer (1)
   m_TagString: Scientist
@@ -38,59 +36,6 @@ Transform:
   - {fileID: 4856204544752987721}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8267862318731425061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433190165055873402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f0745391da55543cfacc80518dbd228b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  targetPosition: {fileID: 0}
-  duration: 20
-  detectionRadius: 3
-  enemyTag: Papaz
-  stopThreshold: 0.5
-  minBounds: {x: 6.07, y: 0, z: -40.3}
-  maxBounds: {x: -6.06, y: 0, z: -47}
-  isPaused: 0
-  isArcher: 1
-  animator: {fileID: 8957625555123118283}
---- !u!114 &3880717336598426458
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433190165055873402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e88805ce4553d6b4f8ba5eba1caf058f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  arrowPrefab: {fileID: 6853439453261350569, guid: eb23ec9117ef7264a8940559aaabe577, type: 3}
-  fireRate: 0.5
-  shootForce: 10
-  isSpaceMode: 0
-  minDistancetoAttack: 7
---- !u!114 &5279576690503675095
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 433190165055873402}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e75d7c20a82972d489cdba151f15feec, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxHealth: 100
-  spawner: {fileID: 0}
 --- !u!95 &8957625555123118283
 Animator:
   serializedVersion: 5
@@ -135,6 +80,28 @@ CapsuleCollider:
   m_Height: 1.4178619
   m_Direction: 1
   m_Center: {x: 0.014948845, y: 0.66265774, z: 0}
+--- !u!114 &2297977712723853506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 433190165055873402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c70269c0ea7561e47809fa6581280cd6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soldierType: 1
+  targetPosition: {fileID: 0}
+  detectionRange: 5
+  attackRange: 4
+  attackCooldown: 0.6
+  health: 100
+  damage: 10
+  enemyTag: Papaz
+  projectilePrefab: {fileID: 0}
+  firePoint: {fileID: 0}
 --- !u!1 &1059024349242286709
 GameObject:
   m_ObjectHideFlags: 0

@@ -5,7 +5,9 @@ using UnityEngine.AI;
 public class SoldierAI : MonoBehaviour
 {
     public enum SoldierType { Melee, Ranged }
+    public enum SoldierFaction { Scientist, Priest }
     public SoldierType soldierType;
+    public SoldierFaction soldierFaction;
 
     public Transform targetPosition; // Ana hedef (düþman yoksa gidilecek yer)
     public float detectionRange = 5f;
@@ -13,7 +15,6 @@ public class SoldierAI : MonoBehaviour
     public float attackCooldown = 1f;
     public int health = 100;
     public int damage = 10;
-    public string enemyTag = "Enemy";
 
     public GameObject projectilePrefab; // Ranged askerlerin attýðý ok prefabý
     public Transform firePoint; // Okun fýrlatýlacaðý nokta
@@ -41,6 +42,7 @@ public class SoldierAI : MonoBehaviour
 
         if (currentEnemy == null)
         {
+            MoveToTarget(); // Düþman yoksa hedefe ilerlemeye devam et
             SearchForEnemy();
         }
         else
@@ -53,6 +55,7 @@ public class SoldierAI : MonoBehaviour
     {
         if (targetPosition != null)
         {
+            agent.isStopped = false;
             agent.SetDestination(targetPosition.position);
             animator.SetBool("isWalking", true);
             Debug.Log(name + " is walking towards target position.");
@@ -64,7 +67,8 @@ public class SoldierAI : MonoBehaviour
         Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRange);
         foreach (Collider col in colliders)
         {
-            if (col.CompareTag(enemyTag))
+            SoldierAI possibleEnemy = col.GetComponent<SoldierAI>();
+            if (possibleEnemy != null && possibleEnemy.soldierFaction != soldierFaction)
             {
                 currentEnemy = col.transform;
                 Debug.Log(name + " found an enemy: " + currentEnemy.name);
@@ -122,6 +126,8 @@ public class SoldierAI : MonoBehaviour
         }
         isAttacking = false;
         animator.SetBool("isAttacking", false);
+        currentEnemy = null; // Düþman öldüðünde hedefi sýfýrla
+        MoveToTarget(); // Tekrar hedefe ilerlemeye baþla
     }
 
     void ShootProjectile()
@@ -133,8 +139,10 @@ public class SoldierAI : MonoBehaviour
             if (rb != null)
             {
                 Vector3 direction = (currentEnemy.position - firePoint.position).normalized;
-                rb.velocity = direction * 1f; // Okun hýzýný ayarla
-                projectile.AddComponent<Projectile>(); // Okun çarptýðýnda hasar vermesi için Projectile scripti ekleniyor
+                rb.velocity = direction * 10f;
+                Projectile projectileScript = projectile.AddComponent<Projectile>();
+                projectileScript.SetDamage(damage);
+                projectileScript.SetFaction(soldierFaction);
                 Debug.Log(name + " fired a projectile at " + currentEnemy.name);
             }
         }
@@ -165,9 +173,11 @@ public class SoldierAI : MonoBehaviour
     }
 }
 
+
 public class Projectile : MonoBehaviour
 {
-    public int damage = 10;
+    private int damage;
+    private SoldierAI.SoldierFaction shooterFaction;
     public float speed = 10f;
     public float lifeTime = 5f;
 
@@ -180,15 +190,20 @@ public class Projectile : MonoBehaviour
         Destroy(gameObject, lifeTime);
     }
 
-    void Update()
+    public void SetDamage(int dmg)
     {
-        transform.position += transform.forward * speed * Time.deltaTime;
+        damage = dmg;
+    }
+
+    public void SetFaction(SoldierAI.SoldierFaction faction)
+    {
+        shooterFaction = faction;
     }
 
     void OnTriggerEnter(Collider other)
     {
         SoldierAI soldier = other.GetComponent<SoldierAI>();
-        if (soldier != null && !other.CompareTag("Enemy"))
+        if (soldier != null && soldier.soldierFaction != shooterFaction)
         {
             soldier.TakeDamage(damage);
             Debug.Log(other.name + " took projectile damage: " + damage);
