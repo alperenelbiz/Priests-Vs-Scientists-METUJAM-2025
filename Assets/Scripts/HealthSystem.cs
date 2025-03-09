@@ -7,7 +7,6 @@ public class HealthSystem : MonoBehaviour
 {
     public float maxHealth = 100f;
     private float currentHealth;
-
     public EnemySpawner spawner;
 
     void Start()
