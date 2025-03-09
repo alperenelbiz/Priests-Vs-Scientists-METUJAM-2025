@@ -132,7 +132,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 2.0f, 5.0f, "Scientist")
+            OnDestroy = (kart) => OkDelay(kart.ad, 3.0f, 5.0f, "Scientist")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -149,7 +149,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 0.5f, 5.0f, "Papaz")
+            OnDestroy = (kart) => OkDelay(kart.ad, 5.0f, 5.0f, "Papaz")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -269,11 +269,7 @@ public class KartMek : MonoBehaviour
         if (kart != null)
         {
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
             EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
 
             foreach (var enemy in enemies)
@@ -297,27 +293,25 @@ public class KartMek : MonoBehaviour
         if (kart != null)
         {
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
             if (targetTag == "Scientist")
             {
-                Debug.Log("Applying arrow speed effect to Scientists");
-                ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
-                foreach (var spawner in scientistSpawners)
+                
+                foreach (var sci in scientist)
                 {
-                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
+                   
+                    sci.GetComponent<SoldierAI>().projectileSpeed += multiplier; 
+                    Debug.Log(sci.GetComponent<SoldierAI>().projectileSpeed ,sci);
                 }
             }
             else if (targetTag == "Papaz")
             {
-                Debug.Log("Applying arrow speed effect to Papaz");
-                PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
-                foreach (var spawner in papazSpawners)
+                
+                foreach (var pri in priest)
                 {
-                    spawner.SetArrowSpeedMultiplier(multiplier, duration);
+                    
+                    pri.GetComponent<SoldierAI>().projectileSpeed -= multiplier;
+                    Debug.Log(pri.GetComponent<SoldierAI>().projectileSpeed, pri);
                 }
             }
             aktifKartlar.Remove(kart);
@@ -334,11 +328,8 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log(kart.ad + " seçildi");
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+           
+            
             foreach(GameObject sci in scientist)
             {
                 sci.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
@@ -361,11 +352,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log(kart.ad + " seçildi");
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+           
             //priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
             //Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
@@ -387,11 +374,7 @@ public class KartMek : MonoBehaviour
         {
             Debug.Log(kart.ad + " seçildi");
             //CoinUpdate(kart);
-            kart.kalanAdet--;
-            if (kart.kalanAdet == 0)
-            {
-                kart.aktiflik = false;
-            }
+            
             //priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
             //Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
