@@ -97,7 +97,7 @@ public class KartMek : MonoBehaviour
             minLevel = 1,
             maxLevel = 21,
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 2.0f, 5.0f, "Papaz")
+            OnDestroy = (kart) => MovementDelay(kart.ad, 2.0f, 5.0f, "Papaz")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -115,7 +115,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => ZamanDelay(kart.ad, 0.5f, 5.0f, "Scientist")
+            OnDestroy = (kart) => MovementDelay(kart.ad, 0.5f, 5.0f, "Scientist")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -132,7 +132,7 @@ public class KartMek : MonoBehaviour
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 2.0f, 5.0f, "Scientist")
+            OnDestroy = (kart) => OkDelay(kart.ad, 2f, 5.0f, "Scientist")
             //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
 
         };
@@ -263,34 +263,100 @@ public class KartMek : MonoBehaviour
 
         return null;
     }
-    void ZamanDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
+    //void ZamanDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
+    //{
+    //    Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+    //    if (kart != null)
+    //    {
+    //        //CoinUpdate(kart);
+    //        kart.kalanAdet--;
+    //        if (kart.kalanAdet == 0)
+    //        {
+    //            kart.aktiflik = false;
+    //        }
+    //        EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
+
+    //        foreach (var enemy in enemies)
+    //        {
+    //            if (enemy.CompareTag(targetTag))
+    //            {
+    //                //Debug.Log($"✅ Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
+    //                enemy.ApplySpeedEffect(multiplier, duration);
+    //            }
+
+    //        }
+    //        aktifKartlar.Remove(kart);
+    //    }
+
+    //    Debug.Log(kart.ad + " seçildi");
+
+    //}
+
+    void MovementDelay(string name, float multiplier, float duration, string targetTag)
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            //CoinUpdate(kart);
+            Debug.Log(kart.ad + " seçildi");
+
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
             {
                 kart.aktiflik = false;
             }
-            EnemyMovement[] enemies = FindObjectsOfType<EnemyMovement>();
 
-            foreach (var enemy in enemies)
+            // **Belirtilen Tag'e Sahip Karakterleri Bul**
+            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+            foreach (SoldierAI soldier in allSoldiers)
             {
-                if (enemy.CompareTag(targetTag))
+                if (soldier.CompareTag(targetTag)) // 🔥 SADECE belirtilen TAG'e sahip karakterleri etkilesin
                 {
-                    //Debug.Log($"✅ Applying {multiplier}x speed effect to {enemy.gameObject.name} ({targetTag})");
-                    enemy.ApplySpeedEffect(multiplier, duration);
+                    soldier.ApplySpeedEffect(multiplier, duration); // ⚡ Hız değiştir
+                    Debug.Log(soldier.name + " hız çarpanı uygulandı: " + multiplier);
                 }
-
             }
+
             aktifKartlar.Remove(kart);
         }
-
-        Debug.Log(kart.ad + " seçildi");
-
     }
+
+
+
+    //void OkDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
+    //{
+    //    Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
+    //    if (kart != null)
+    //    {
+    //        //CoinUpdate(kart);
+    //        kart.kalanAdet--;
+    //        if (kart.kalanAdet == 0)
+    //        {
+    //            kart.aktiflik = false;
+    //        }
+    //        if (targetTag == "Scientist")
+    //        {
+    //            Debug.Log("Applying arrow speed effect to Scientists");
+    //            ScientistArrowSpawner[] scientistSpawners = FindObjectsOfType<ScientistArrowSpawner>();
+    //            foreach (var spawner in scientistSpawners)
+    //            {
+    //                spawner.SetArrowSpeedMultiplier(multiplier, duration);
+    //            }
+    //        }
+    //        else if (targetTag == "Papaz")
+    //        {
+    //            Debug.Log("Applying arrow speed effect to Papaz");
+    //            PapazArrowSpawner[] papazSpawners = FindObjectsOfType<PapazArrowSpawner>();
+    //            foreach (var spawner in papazSpawners)
+    //            {
+    //                spawner.SetArrowSpeedMultiplier(multiplier, duration);
+    //            }
+    //        }
+    //        aktifKartlar.Remove(kart);
+    //    }
+
+    //    Debug.Log(kart.ad + " seçildi");
+
+    //}
     void OkDelay(string name, float multiplier, float duration, string targetTag) // asker özellikleri arttır!!!!
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
@@ -333,53 +399,66 @@ public class KartMek : MonoBehaviour
         if (kart != null)
         {
             Debug.Log(kart.ad + " seçildi");
-            //CoinUpdate(kart);
+
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
             {
                 kart.aktiflik = false;
             }
-            foreach(GameObject sci in scientist)
+
+            // Space Mode'u AÇ
+            saptir = true;
+
+            // SADECE TAG'I "Scientist" OLANLARI BUL ve SpaceMode'u Aç
+            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+            foreach (SoldierAI soldier in allSoldiers)
             {
-                sci.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+                if (soldier.soldierType == SoldierAI.SoldierType.Ranged && soldier.CompareTag("Scientist"))
+                {
+                    soldier.isSpaceMode = saptir; // 🔥 Sadece "Scientist" olan Ranged askerler Space Mode'a girsin
+                    Debug.Log(soldier.name + " için Space Mode AKTİF (Sadece Scientist): " + saptir);
+                }
             }
-            
-            Debug.Log(saptir);
-            // Start the coroutine to handle the saptir bool
-            StartCoroutine(SetForSeconds(saptir, 3f, kart));
+
+            // Belirli süre sonra tekrar kapat
+            StartCoroutine(SetForSeconds(!saptir, 1f, kart));
+
             aktifKartlar.Remove(kart);
         }
-
-        Debug.Log(kart.ad + " seçildi");
-
-
     }
+
+
     void radyasyon(string name, bool saptir)
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
             Debug.Log(kart.ad + " seçildi");
-            //CoinUpdate(kart);
+
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
             {
                 kart.aktiflik = false;
             }
-            //priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
-            //Debug.Log(saptir);
-            // Start the coroutine to handle the saptir bool
 
-            //StartCoroutine(SetForSeconds(saptir, 0.8f, kart));
-            //priest.GetComponent<PapazArrowSpawner>().ActivateMarieCurieMode();
+            // **SADECE "Priest" TAG'İNE SAHİP RANGED ASKERLERİ BUL VE MODU AKTİF ET**
+            SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+            foreach (SoldierAI soldier in allSoldiers)
+            {
+                if (soldier.CompareTag("Papaz"))
+                {
+                    soldier.ActivateMarieCurieMode(); // ☢️ **Marie Curie Modu Açılıyor**
+                    Debug.Log(soldier.name + " için Marie Curie Mode AKTİF (Sadece Priest)");
+                }
+            }
+
+            // **Belirli süre sonra tekrar kapat**
+            StartCoroutine(SetForSeconds(saptir, 3f, kart));
+
             aktifKartlar.Remove(kart);
-
         }
-
-        Debug.Log(kart.ad + " seçildi");
-
-
     }
+
     void karaDelik(string name, bool saptir)
     {
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
@@ -423,9 +502,8 @@ public class KartMek : MonoBehaviour
         {
            foreach(GameObject sci in scientist)
             {
-                sci.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
-            }
-            
+                //sci.GetComponent<Projectile>().isSpaceMode = saptir;
+            }            
         }
             
         else

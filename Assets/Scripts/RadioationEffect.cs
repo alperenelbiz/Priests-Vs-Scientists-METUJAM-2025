@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class RadioationEffect : MonoBehaviour
 {
-    private ParticleSystem radiationParticles;
+    public ParticleSystem radiationParticles;
 
     void Start()
     {
