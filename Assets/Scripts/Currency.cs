@@ -34,7 +34,7 @@ public class Currency : MonoBehaviour
     {
         if (currencyText != null)
         {
-            currencyText.text = "CURRENCY : " + Mathf.FloorToInt(currency).ToString(); // Tam sayı göster
+            currencyText.text = "Currency : " + Mathf.FloorToInt(currency).ToString(); // Tam sayı göster
         }
     }
 

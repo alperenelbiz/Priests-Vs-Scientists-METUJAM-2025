@@ -26,7 +26,8 @@ public class KartMek : MonoBehaviour
     public List<GameObject> scientist;
     public List<GameObject> priest;
     List<GameObject> cardObjectList = new List<GameObject>();
-    //public List<Sprite> kartImageList = new List<Sprite>();
+    public List<Sprite> kartImageList = new List<Sprite>();
+    public Currency currency;
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
     void Awake()
@@ -37,51 +38,51 @@ public class KartMek : MonoBehaviour
 
         Kart radyasyonKartıOluştur = new()
         {
-            ad = "RADYASYON",
+            ad = "Radiation",
             aciklama = "Radyasyon yay",
             aktiflik = true,
            
-            olasilik = 0.5f,
+            olasilik = 0.2f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => radyasyon(kart.ad, true)
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => radyasyon(kart.ad, true),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("radyasyon"))
 
         };
 
         kartListesi.Add(radyasyonKartıOluştur);
         Kart okSaptırKartıOluştur = new()
         {
-            ad = "Ok saptır",
+            ad = "Arrow Deflect",
             aciklama = "Okun yönünü saptır",
             aktiflik = true,
             
-            olasilik = 0.5f,
+            olasilik = 0.4f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => okSaptır(kart.ad, true)
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => okSaptır(kart.ad, true),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("newton"))
 
         };
 
         kartListesi.Add(okSaptırKartıOluştur);
         Kart karaDelikOluştur = new()
         {
-            ad = "Kara delik",
+            ad = "Black Hole",
             aciklama = "blackniga",
             aktiflik = true,
             
-            olasilik = 0.5f,
+            olasilik = 0.1f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => karaDelik(kart.ad, true)
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => karaDelik(kart.ad, true),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("karadelik"))
 
         };
 
@@ -89,7 +90,7 @@ public class KartMek : MonoBehaviour
 
         Kart hızlandırmaKartıOluştur = new()
         {
-            ad = "Zamanı Hızlandır",
+            ad = "Time Speed",
             aciklama = "Ben hızım",
             aktiflik = true,
             
@@ -97,8 +98,8 @@ public class KartMek : MonoBehaviour
             minLevel = 1,
             maxLevel = 21,
             cost = 2,
-            OnDestroy = (kart) => MovementDelay(kart.ad, 2.0f, 5.0f, "Papaz")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => MovementDelay(kart.ad, 2.0f, 5.0f, "Papaz"),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("hızlan"))
 
         };
 
@@ -106,51 +107,51 @@ public class KartMek : MonoBehaviour
 
         Kart yavaşlatmaKartıOluştur = new()
         {
-            ad = "Yavaşlat",
+            ad = "Time Slow",
             aciklama = "Ben hız değilim",
             aktiflik = true,
            
-            olasilik = 0.5f,
+            olasilik = 0.4f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => MovementDelay(kart.ad, 0.5f, 5.0f, "Scientist")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => MovementDelay(kart.ad, 0.5f, 5.0f, "Scientist"),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("yavaşlat"))
 
         };
 
         kartListesi.Add(yavaşlatmaKartıOluştur);
         Kart okYavaşlatmaKartıOluştur = new()
         {
-            ad = "Ok yavaslat",
+            ad = "Arrow Slow",
             aciklama = "Ben hız değilim",
             aktiflik = true,
             
-            olasilik = 0.5f,
+            olasilik = 0.2f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 2f, 5.0f, "Scientist")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => OkDelay(kart.ad, 2f, 5.0f, "Scientist"),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("yavaşlat"))
 
         };
 
         kartListesi.Add(okYavaşlatmaKartıOluştur);
         Kart okHızlandırmaKartıOluştur = new()
         {
-            ad = " Ok Hizlandir",
+            ad = " Arrow Speed",
             aciklama = "Ben hız değilim",
             aktiflik = true,
             
-            olasilik = 0.5f,
+            olasilik = 0.2f,
             minLevel = 1,
             maxLevel = 21,
 
             cost = 2,
-            OnDestroy = (kart) => OkDelay(kart.ad, 0.5f, 5.0f, "Papaz")
-            //gorsel = kartImageList.FirstOrDefault(x => x.name == ("OkcuKulesiOlusturma_0"))
+            OnDestroy = (kart) => OkDelay(kart.ad, 0.5f, 5.0f, "Papaz"),
+            gorsel = kartImageList.FirstOrDefault(x => x.name == ("hızlan"))
 
         };
 
@@ -193,16 +194,12 @@ public class KartMek : MonoBehaviour
                 continue; // Diğer Kartlara geç
             }
             TextMeshProUGUI[] textBox = cardObject.GetComponentsInChildren<TextMeshProUGUI>();
-            if (textBox.Length >= 2)
-            {
+            
                 textBox[0].text = secilenKart.ad; // İlk(Title) TextBox'ı doldur
-                textBox[1].text = secilenKart.aciklama; // İkinci(Description) TextBox'ı doldur
-                textBox[2].text = secilenKart.cost.ToString(); // Üçücüncü(Cost) TextBox'ı doldur
-            }
-            else
-            {
-                Debug.Log("TextBoxlar bulunamadı!");
-            }
+                
+               
+            
+            
 
             Image[] image = cardObject.GetComponentsInChildren<Image>();
             if (image.Length >= 2)
@@ -315,7 +312,7 @@ public class KartMek : MonoBehaviour
                     Debug.Log(soldier.name + " hız çarpanı uygulandı: " + multiplier);
                 }
             }
-
+            currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
     }
@@ -386,6 +383,7 @@ public class KartMek : MonoBehaviour
                     spawner.SetArrowSpeedMultiplier(multiplier, duration);
                 }
             }
+            currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
 
@@ -419,7 +417,7 @@ public class KartMek : MonoBehaviour
 
             // **2️⃣ Belirtilen süre sonra hepsini kapat**
             StartCoroutine(DisableSpaceModeAfter(3f)); // 3 saniye sonra kapat
-
+            currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
     }
@@ -465,7 +463,7 @@ public class KartMek : MonoBehaviour
 
             // **Belirli süre sonra tekrar kapat**
             StartCoroutine(SetForSeconds(saptir, 3f, kart));
-
+            currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
     }
@@ -475,25 +473,50 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
-            //CoinUpdate(kart);
+            Debug.Log($"🕳️ Kara Delik Kartı Kullanıldı: {kart.ad}");
+
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
             {
                 kart.aktiflik = false;
             }
-            //priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
-            //Debug.Log(saptir);
-            // Start the coroutine to handle the saptir bool
-            //StartCoroutine(SetForSeconds(saptir, 5f, kart));
-            //priest.GetComponent<PapazArrowSpawner>().ActivateHawkingMode();
+
+            // **1️⃣ Kara Delik Nesnesini Spawn Et**
+            Vector3 spawnPosition = new Vector3(0, 0, 0); // Kara delik konumu (İsteğe bağlı değiştirebilirsin)
+           // GameObject karadelik = Instantiate(karadelikPrefab, spawnPosition, Quaternion.identity);
+            Debug.Log($"🛠️ Kara Delik {spawnPosition} konumunda oluşturuldu.");
+
+            // **2️⃣ Belirli bir süre boyunca ekstra "Priest" spawnlamayı etkinleştir**
+            StartCoroutine(EnableExtraPriestSpawning(5f)); // 5 saniye boyunca aktif kalacak
+
+            // **3️⃣ Belirli Süre Sonra Kara Deliği Yok Et**
+            // Destroy(karadelik, 5f); // Kara delik 5 saniye sonra yok olacak
+            currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
 
-        Debug.Log(kart.ad + " seçildi");
-
-
     }
+    IEnumerator EnableExtraPriestSpawning(float duration)
+    {
+        SoldierSpawner[] allSpawners = FindObjectsOfType<SoldierSpawner>();
+
+        foreach (SoldierSpawner spawner in allSpawners)
+        {
+           // spawner.EnablePriestBoost(true); // Priest spawn boost aktif
+        }
+
+        Debug.Log("⏳ Priest spawn artırıldı!");
+
+        yield return new WaitForSeconds(duration);
+
+        foreach (SoldierSpawner spawner in allSpawners)
+        {
+            //spawner.EnablePriestBoost(false); // Priest spawn boost devre dışı
+        }
+
+        Debug.Log("🛑 Priest spawn boost sona erdi.");
+    }
+
     private IEnumerator SetForSeconds(bool saptir, float duration, Kart kart)
     {
 
