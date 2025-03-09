@@ -6,30 +6,32 @@ using DG.Tweening;
 public class EnemyMovement : MonoBehaviour
 {
     public Transform targetPosition; // Set in Inspector
-    [SerializeField] private float duration = 3f; // Time to reach target
+    [SerializeField] private float moveSpeed = 3f; // Time to reach target
     [SerializeField] private float detectionRadius = 5f; // Detection range
     [SerializeField] private string enemyTag; // Object to detect (e.g., "Scientist" or "Papaz")
     [SerializeField] private float stopThreshold = 0.5f; // Distance to stop at
+    [SerializeField] private Vector3 spawnPoint;
 
     [Header("Movement Boundaries")] 
     [SerializeField] private Vector3 minBounds = new Vector3(-5f, 0f, -5f); // Minimum boundary
     [SerializeField] private Vector3 maxBounds = new Vector3(5f, 0f, 5f);  // Maximum boundary
 
-    private Tween moveTween; // Store movement tween
-    private bool isPaused = false;
+    public Tween moveTween; // Store movement tween
+    public bool isPaused = false;
     private float fixedY; // Stores the Y position to keep it constant
     private bool hasShotArrow = false; // Prevents multiple arrow shots
     private bool isScientistShooting = false; // Prevents multiple scientist attacks
     private bool hasAttacked = false; // Prevents multiple sword attacks
     [SerializeField] private bool isArcher = false; // Is this enemy an archer?]
 
-    [SerializeField] private Animator animator; // Animator reference
+    [SerializeField] public Animator animator; // Animator reference
 
     private PapazArrowSpawner arrowSpawner; 
     private SwordAttack swordAttack; 
 
     void Start()
     {
+        spawnPoint = transform.position;
         fixedY = transform.position.y;
         arrowSpawner = GetComponent<PapazArrowSpawner>();
         swordAttack = GetComponent<SwordAttack>();
@@ -44,19 +46,12 @@ public class EnemyMovement : MonoBehaviour
 
     void MoveToTarget()
     {
-        if (targetPosition == null)
-        {
-            //Debug.LogError(gameObject.name + ": Targetposition is missing!");
-            return;
-        }
-        //Debug.Log("🚀 " + gameObject.name + " moving to target: " + targetPosition.position);
-        
+        if (targetPosition == null) return;
+
         animator.SetBool("isWalking", true);
         animator.SetBool("isAttacking", false);
         hasAttacked = false;
-        //animator.SetBool("isWalking", true);
 
-        // Generate intermediate waypoints with slight randomness
         Vector3[] path = new Vector3[3];
         path[0] = transform.position;
         path[1] = ClampToBounds(new Vector3(
@@ -66,13 +61,15 @@ public class EnemyMovement : MonoBehaviour
         ));
         path[2] = ClampToBounds(targetPosition.position);
 
+        float totalDistance = Vector3.Distance(path[0], path[1]) + Vector3.Distance(path[1], path[2]);
+        float duration = totalDistance / moveSpeed;
+
         moveTween = transform.DOPath(path, duration, PathType.CatmullRom)
-            .SetEase(Ease.InOutQuad)
+            .SetEase(Ease.Linear)
             .OnUpdate(() =>
             {
-                // Make the character look at the target but only rotate on Y-axis
                 Vector3 direction = (targetPosition.position - transform.position).normalized;
-                direction.y = 0f; // Keep Y rotation unchanged
+                direction.y = 0f;
                 if (direction != Vector3.zero)
                 {
                     Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -83,13 +80,39 @@ public class EnemyMovement : MonoBehaviour
             {
                 moveTween = null;
                 animator.SetBool("isWalking", false);
-                animator.SetBool("isAttacking", true);
                 TryShootArrow();
                 TriggerScientistAttack();
                 PerformSwordAttack();
             });
+
         hasShotArrow = false;
         isScientistShooting = false;
+    }
+
+    public void Die()
+    {
+        if (moveTween != null)
+        {
+            moveTween.Kill(); // Stop movement immediately
+            moveTween = null;
+        }
+
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isAttacking", false);
+
+        gameObject.SetActive(false); // Deactivate enemy
+        Invoke(nameof(Respawn), 5f); // Respawn after 5 seconds
+    }
+
+    // 🔄 **Respawn Enemy at Original Location**
+    private void Respawn()
+    {
+        gameObject.SetActive(true); // Reactivate enemy
+        transform.position = spawnPoint; // Reset position
+        hasAttacked = false;
+        isPaused = false;
+
+        MoveToTarget(); // Restart movement
     }
 
     void DetectEnemy()
@@ -101,11 +124,11 @@ public class EnemyMovement : MonoBehaviour
 
         foreach (var col in colliders)
         {
-            Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
+            //Debug.Log($"👀 {gameObject.name} detected: {col.gameObject.name} with tag {col.tag}");
 
             if (col.CompareTag(enemyTag))
             {
-                Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
+                //Debug.Log($"⏸ {gameObject.name} stopping (Detected {enemyTag})");
                 enemyNearby = true;
                 break;
             }
@@ -130,7 +153,7 @@ public class EnemyMovement : MonoBehaviour
         }
         else if (!enemyNearby && isPaused)
         {
-            Debug.Log($"▶ {gameObject.name} resuming movement");
+            //Debug.Log($"▶ {gameObject.name} resuming movement");
             moveTween.Play();
             isPaused = false;
             animator.SetBool("isWalking", true);
@@ -153,7 +176,6 @@ public class EnemyMovement : MonoBehaviour
             moveTween.Kill();
             moveTween = null;
             animator.SetBool("isWalking", false);
-            animator.SetBool("isAttacking", true);
             TryShootArrow();
             TriggerScientistAttack();
             PerformSwordAttack();
@@ -164,7 +186,7 @@ public class EnemyMovement : MonoBehaviour
     {
         if (swordAttack != null && !hasAttacked)  // Only start attack loop if not already attacking
         {
-            Debug.Log($"⚔ {gameObject.name} starts attacking!");
+            //Debug.Log($"⚔ {gameObject.name} starts attacking!");
 
             hasAttacked = true; // Enemy is now in attack mode
             animator.SetBool("isWalking", false);
@@ -178,7 +200,9 @@ public class EnemyMovement : MonoBehaviour
     {
         while (hasAttacked) // Keep attacking as long as they are in attack mode
         {
-            Debug.Log($"⚔ {gameObject.name} attacks!");
+            //Debug.Log($"⚔ {gameObject.name} attacks!");
+            
+            animator.SetBool("isAttacking", true);
             swordAttack.DealDamage(); // Apply damage
 
             yield return new WaitForSeconds(2f); // Delay between attacks (adjust if needed)
@@ -271,9 +295,67 @@ public class EnemyMovement : MonoBehaviour
         }
     }
 
+    public void StopMovement()
+    {
+        if (moveTween != null) // Eğer DOTween hareket ediyorsa
+        {
+            moveTween.Pause(); // **Hareketi durdur**
+            isPaused = true;
+            animator.SetBool("isWalking", false);
+            animator.SetBool("isAttacking", false);
+        }
+    }
+
+    public void ResumeMovement()
+    {
+        if (moveTween != null) // Eğer DOTween durmuşsa
+        {
+            moveTween.Play(); // **Hareketi devam ettir**
+            isPaused = false;
+            animator.SetBool("isWalking", true);
+        }
+    }
+
+    public void ResetMovement()
+{
+    if (moveTween != null)
+    {
+        moveTween.Kill(); // Stop current movement
+        moveTween = null;
+    }
+    
+    isPaused = false;
+    hasShotArrow = false;
+    isScientistShooting = false;
+    hasAttacked = false;
+    
+    transform.position = transform.parent.position; // Reset position to spawn point
+}
+
+
     private void OnDrawGizmosSelected()
     {
+        // Detection Radius
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+
+        // Movement Boundaries
+        Gizmos.color = Color.red;
+        Vector3 bottomLeft = new Vector3(minBounds.x, transform.position.y, minBounds.z);
+        Vector3 bottomRight = new Vector3(maxBounds.x, transform.position.y, minBounds.z);
+        Vector3 topLeft = new Vector3(minBounds.x, transform.position.y, maxBounds.z);
+        Vector3 topRight = new Vector3(maxBounds.x, transform.position.y, maxBounds.z);
+
+        Gizmos.DrawLine(bottomLeft, bottomRight);
+        Gizmos.DrawLine(bottomRight, topRight);
+        Gizmos.DrawLine(topRight, topLeft);
+        Gizmos.DrawLine(topLeft, bottomLeft);
+
+        // Boundary Corners for Better Visibility
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawSphere(bottomLeft, 0.2f);
+        Gizmos.DrawSphere(bottomRight, 0.2f);
+        Gizmos.DrawSphere(topLeft, 0.2f);
+        Gizmos.DrawSphere(topRight, 0.2f);
     }
 }

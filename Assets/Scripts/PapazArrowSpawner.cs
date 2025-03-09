@@ -1,6 +1,9 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using DG.Tweening;
+using JetBrains.Annotations;
+
 
 public class PapazArrowSpawner : MonoBehaviour
 {
@@ -11,27 +14,33 @@ public class PapazArrowSpawner : MonoBehaviour
     public float minDistanceToAttack =7f;
     private float arrowSpeedMultiplier = 1f;
     
-    private bool isMarieCurieModeActive = false;
+    public bool isMarieCurieModeActive = false;
     public HealthSystem healthSystem; // Sa�l�k sistemine eri�im
     public RadioationEffect radiationEffect; // Par�ac�k efekti
 
     public float blackHoleDuration = 5f;
     public float pushForce = 10f;
-    private bool isHawkingModeActive = false;
+    public bool isHawkingModeActive = false;
+
+    public float detectionRadius = 10f; // Bilim insanlarını algılama yarıçapı
+
+
+
 
     void Start()
     {
         StartCoroutine(FireArrows());
+        
     }
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Alpha2) && !isMarieCurieModeActive)
         {
-            ActivateMarieCurieMode();
+            //ActivateMarieCurieMode();
         }
         if (Input.GetKeyDown(KeyCode.Alpha4) && !isHawkingModeActive) 
         {
-            ActivateHawkingMode();
+            //ActivateHawkingMode();
         }
     }
 
@@ -81,6 +90,7 @@ public class PapazArrowSpawner : MonoBehaviour
 
     public void ShootArrow(Transform target)
     {
+        if (target == null) return;
         GameObject newArrow = Instantiate(arrowPrefab, transform.position, Quaternion.identity);
         Rigidbody rb = newArrow.GetComponent<Rigidbody>();
 
@@ -126,12 +136,12 @@ public class PapazArrowSpawner : MonoBehaviour
         // Son h�z vekt�r�n� belirle
         return velocityXZ + Vector3.up * initialVelocityY;
     }
-    void ActivateMarieCurieMode()
-    {
-        isMarieCurieModeActive = true;
-        radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
-        StartCoroutine(HealOverTime());
-    }
+    //public void ActivateMarieCurieMode()
+    //{
+    //    isMarieCurieModeActive = true;
+    //    radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
+    //    //StartCoroutine(HealOverTime());
+    //}
 
     IEnumerator HealOverTime()
     {
@@ -143,31 +153,48 @@ public class PapazArrowSpawner : MonoBehaviour
             elapsedTime += Time.deltaTime;
             yield return null;
         }
-        DeactivateMarieCurieMode();
+        //DeactivateMarieCurieMode();
     }
 
-    void DeactivateMarieCurieMode()
-    {
-        isMarieCurieModeActive = false;
-        radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
-    }
+    //void DeactivateMarieCurieMode()
+    //{
+    //    isMarieCurieModeActive = false;
+    //    radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
+   // }
 
-    void ActivateHawkingMode()
+    /*public void ActivateHawkingMode()
     {
-        Transform nearestScientist = FindNearestTarget("Scientist");
-        if (nearestScientist == null) return;
+        Transform nearestScientist = DetectScientist();
+        if (nearestScientist == null)
+        {
+            Debug.LogWarning("⚠ En yakın Scientist bulunamadı!");
+            return;
+        }
 
         isHawkingModeActive = true;
 
-        // **Papaz ile Scientist�in tam ortas�nda kara delik olu�tur**
+        // **Kara delik oluştur**
         Vector3 spawnPosition = (transform.position + nearestScientist.position) / 2f;
-        spawnPosition.y = spawnPosition.y - 1f;
+        spawnPosition.y -= 1f;
         GameObject blackHole = Instantiate(blackHolePrefab, spawnPosition, Quaternion.identity);
 
-        StartCoroutine(BlackHoleEffect(blackHole, nearestScientist));
-    }
+        // **Scientist’i kara delikten uzağa it**
+        Rigidbody rb = nearestScientist.GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            Vector3 pushDirection = (nearestScientist.position - blackHole.transform.position).normalized;
+            rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse); // Aniden itme
+            Debug.Log($"💥 Scientist {pushDirection} yönüne itildi!");
+        }
 
-    IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
+        StartCoroutine(BlackHoleEffect(blackHole, nearestScientist));
+    }*/
+
+
+
+
+
+    /*IEnumerator BlackHoleEffect(GameObject blackHole, Transform scientist)
     {
         float elapsedTime = 0f;
         Rigidbody rb = scientist.GetComponent<Rigidbody>();
@@ -177,20 +204,45 @@ public class PapazArrowSpawner : MonoBehaviour
             if (scientist != null && rb != null)
             {
                 Vector3 pushDirection = (scientist.position - blackHole.transform.position).normalized;
-                
-                // **Daha g��l� bir itme kuvveti uygula**
-                rb.AddForce(pushDirection * pushForce * rb.mass, ForceMode.Impulse);
 
-                Debug.Log("Scientist itildi! Y�n: " + pushDirection);
+                // **Her 0.1 saniyede bir ek itme uygula (Kademeli güç veriyoruz)**
+                rb.AddForce(pushDirection * (pushForce * 0.1f) * rb.mass, ForceMode.Force);
+
+                Debug.Log($"Scientist yavaş yavaş uzaklaşıyor! Kuvvet: {pushForce * 0.1f}");
             }
 
             elapsedTime += 0.1f;
-            yield return new WaitForSeconds(0.1f); // Daha s�k kontrol ederek etkiyi art�r
+            yield return new WaitForSeconds(0.1f);
         }
 
         Destroy(blackHole);
         isHawkingModeActive = false;
     }
+
+    Transform DetectScientist()
+    {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        Transform nearestTarget = null;
+        float minDistance = Mathf.Infinity;
+
+        foreach (var col in colliders)
+        {
+            if (col.CompareTag("Scientist")) // Sadece Scientistleri kontrol et
+            {
+                float distance = Vector3.Distance(transform.position, col.transform.position);
+
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    nearestTarget = col.transform;
+                }
+            }
+        }
+
+        return nearestTarget; // Eğer bilim insanı yoksa null döner
+    }*/
+
+
 
 
 }

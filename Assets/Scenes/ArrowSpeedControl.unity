@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.4495458, g: 0.49961787, b: 0.57567537, a: 1}
+  m_IndirectSpecularColor: {r: 0.44954574, g: 0.499618, b: 0.57567537, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -143,7 +143,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -200,7 +200,6 @@ MonoBehaviour:
   arrowPrefab: {fileID: 6853439453261350569, guid: eb23ec9117ef7264a8940559aaabe577, type: 3}
   fireRate: 0.5
   shootForce: 10
-  isSpaceMode: 0
   minDistancetoAttack: 7
 --- !u!114 &54125876
 MonoBehaviour:
@@ -221,8 +220,6 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
-  isArcher: 1
-  animator: {fileID: 54125873}
 --- !u!1 &348734746
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,8 +328,6 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 29.2, y: 9.44, z: -25.3}
   maxBounds: {x: 33.9, y: 9.44, z: -22.2}
-  isArcher: 0
-  animator: {fileID: 0}
 --- !u!1001 &703169905
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -351,7 +346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca4c690470d1eac479003638b02a0ddc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -23.82
+      value: -29.7
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: ca4c690470d1eac479003638b02a0ddc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -666,6 +661,8 @@ MonoBehaviour:
   slowMultiplier: 0.5
   boostDuration: 3
   boostMultiplier: 1.5
+  slowKey: 116
+  boostKey: 121
 --- !u!4 &1318680903
 Transform:
   m_ObjectHideFlags: 0
@@ -1023,8 +1020,6 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
-  isArcher: 1
-  animator: {fileID: 1717851921}
 --- !u!114 &1717851919
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1059,11 +1054,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxHealth: 100
---- !u!95 &1717851921 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: ca4c690470d1eac479003638b02a0ddc, type: 3}
-  m_PrefabInstance: {fileID: 703169905}
-  m_PrefabAsset: {fileID: 0}
 --- !u!136 &1717851923
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -1079,7 +1069,7 @@ CapsuleCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -1247,7 +1237,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 32.29
+      value: 33.278267
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1285,33 +1275,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: -2250349151594199136, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -2250349151594199136, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -1639817414655226966, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -1639817414655226966, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: -1639817414655226966, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
       propertyPath: m_Name
       value: science archer (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: dd674221b4f23264c90ab6051e64ac62, type: 3}
-      propertyPath: m_TagString
-      value: Scientist
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1736,8 +1702,6 @@ MonoBehaviour:
   stopThreshold: 0.5
   minBounds: {x: 30.3, y: 9.44, z: -4.12}
   maxBounds: {x: 34, y: 9.44, z: -7.06}
-  isArcher: 0
-  animator: {fileID: 0}
 --- !u!1001 &1483587829818261709
 PrefabInstance:
   m_ObjectHideFlags: 0

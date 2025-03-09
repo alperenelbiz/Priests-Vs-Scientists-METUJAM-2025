@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    public Transform player;
+    public Transform cameraFollower;
     public Vector3 offset;
     public Vector3 rotation;
 
     void Start()
     {
-        transform.position = player.position + offset;
+        transform.position = cameraFollower.position + offset;
         transform.rotation = Quaternion.Euler(rotation.x, rotation.y, rotation.z);
     }
 
     void FixedUpdate()
     {
-        Vector3 desiredPosition = player.position + offset;
+        Vector3 desiredPosition = cameraFollower.position + offset;
         transform.position = Vector3.Lerp(transform.position, desiredPosition, Time.deltaTime * 5f);  
 
     }
