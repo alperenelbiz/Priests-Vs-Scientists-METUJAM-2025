@@ -22,10 +22,10 @@ public class EnemySpawner : MonoBehaviour
             inactiveEnemies.Enqueue(enemy);
         }
 
-        StartCoroutine(SpawnEnemiesRoutine());
+       // StartCoroutine(SpawnEnemiesRoutine());
     }
 
-    IEnumerator SpawnEnemiesRoutine()
+    /*IEnumerator SpawnEnemiesRoutine()
     {
         while (inactiveEnemies.Count > 0 || activeEnemyCount > 0) // Stop when all enemies are dead
         {
@@ -37,7 +37,7 @@ public class EnemySpawner : MonoBehaviour
         }
 
         Debug.Log("All enemies have been defeated. Spawning has stopped.");
-    }
+    }*/
 
     void SpawnEnemy()
     {

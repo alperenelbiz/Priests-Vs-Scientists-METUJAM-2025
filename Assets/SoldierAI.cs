@@ -251,11 +251,11 @@ public class SoldierAI : MonoBehaviour
         radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
         //StartCoroutine(HealOverTime());
     }
-   /* void DeactivateMarieCurieMode()
+   public void DeactivateMarieCurieMode()
     {
         isMarieCurieModeActive = false;
         radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
-    }*/
+    }
 
 
     Vector3 CalculateLaunchVelocity(Transform target)

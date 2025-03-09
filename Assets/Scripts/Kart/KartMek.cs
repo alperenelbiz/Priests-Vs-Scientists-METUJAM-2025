@@ -398,7 +398,7 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
+            Debug.Log($"🎴 Kart Kullanıldı: {kart.ad}");
 
             kart.kalanAdet--;
             if (kart.kalanAdet == 0)
@@ -406,26 +406,37 @@ public class KartMek : MonoBehaviour
                 kart.aktiflik = false;
             }
 
-            // Space Mode'u AÇ
-            saptir = true;
-
-            // SADECE TAG'I "Scientist" OLANLARI BUL ve SpaceMode'u Aç
+            // **1️⃣ SADECE "Scientist" TAG'İNE SAHİP OLAN RANGED ASKERLERİ BUL VE SPACE MODE'U AÇ**
             SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
             foreach (SoldierAI soldier in allSoldiers)
             {
                 if (soldier.soldierType == SoldierAI.SoldierType.Ranged && soldier.CompareTag("Scientist"))
                 {
-                    soldier.isSpaceMode = saptir; // 🔥 Sadece "Scientist" olan Ranged askerler Space Mode'a girsin
-                    Debug.Log(soldier.name + " için Space Mode AKTİF (Sadece Scientist): " + saptir);
+                    soldier.isSpaceMode = true; // 🔥 Space Mode AÇ
+                    Debug.Log($"✅ {soldier.name} için Space Mode AKTİF");
                 }
             }
 
-            // Belirli süre sonra tekrar kapat
-            StartCoroutine(SetForSeconds(!saptir, 1f, kart));
+            // **2️⃣ Belirtilen süre sonra hepsini kapat**
+            StartCoroutine(DisableSpaceModeAfter(3f)); // 3 saniye sonra kapat
 
             aktifKartlar.Remove(kart);
         }
     }
+    IEnumerator DisableSpaceModeAfter(float duration)
+    {
+        yield return new WaitForSeconds(duration); // ⏳ Süre kadar bekle
+
+        // **Sahnede olan tüm askerleri bul ve Space Mode'u kapat**
+        SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
+        foreach (SoldierAI soldier in allSoldiers)
+        {
+            soldier.isSpaceMode = false; // ❌ Space Mode KAPAT
+            Debug.Log($"🛑 {soldier.name} için Space Mode KAPANDI");
+        }
+    }
+
+
 
 
     void radyasyon(string name, bool saptir)
@@ -494,7 +505,7 @@ public class KartMek : MonoBehaviour
         {
             foreach(GameObject pri in priest)
             {
-                pri.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
+                pri.GetComponent<SoldierAI>().isMarieCurieModeActive = saptir;
             }
             
         }
@@ -502,7 +513,7 @@ public class KartMek : MonoBehaviour
         {
            foreach(GameObject sci in scientist)
             {
-                //sci.GetComponent<Projectile>().isSpaceMode = saptir;
+                sci.GetComponent<SoldierAI>().isSpaceMode = saptir;
             }            
         }
             
