@@ -873,6 +873,10 @@ PrefabInstance:
       propertyPath: targetPosition
       value: 
       objectReference: {fileID: 1005728526}
+    - target: {fileID: 2429604456910836891, guid: 32dd3bdcc8b14e647937bece91f55ab4, type: 3}
+      propertyPath: projectileSpeed
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 9013544012196618096, guid: 32dd3bdcc8b14e647937bece91f55ab4, type: 3}
       propertyPath: m_LocalPosition.x
       value: 38.39097
@@ -1185,9 +1189,33 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: priest.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: priest.Array.data[0]
+      value: 
+      objectReference: {fileID: 155395623}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: priest.Array.data[1]
+      value: 
+      objectReference: {fileID: 1005826510}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: scientist.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
       propertyPath: Coordinates.Array.size
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: scientist.Array.data[0]
+      value: 
+      objectReference: {fileID: 1684108157}
+    - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
+      propertyPath: scientist.Array.data[1]
+      value: 
+      objectReference: {fileID: 1694569830}
     - target: {fileID: 5810013036759614582, guid: d4c32e658387b394f8e9858c6f714213, type: 3}
       propertyPath: Coordinates.Array.data[1]
       value: 

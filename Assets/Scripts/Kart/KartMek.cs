@@ -23,8 +23,8 @@ public class KartMek : MonoBehaviour
     //LevelControl levelControl;
     [SerializeField] public List<Transform> Coordinates = new List<Transform>();
 
-    public GameObject scientist;
-    public GameObject priest;
+    public List<GameObject> scientist;
+    public List<GameObject> priest;
     List<GameObject> cardObjectList = new List<GameObject>();
     //public List<Sprite> kartImageList = new List<Sprite>();
     //public GameObject playerSoldier;
@@ -40,7 +40,7 @@ public class KartMek : MonoBehaviour
             ad = "RADYASYON",
             aciklama = "Radyasyon yay",
             aktiflik = true,
-            kalanAdet = 3,
+           
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -57,7 +57,7 @@ public class KartMek : MonoBehaviour
             ad = "Ok saptır",
             aciklama = "Okun yönünü saptır",
             aktiflik = true,
-            kalanAdet = 3,
+            
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -74,7 +74,7 @@ public class KartMek : MonoBehaviour
             ad = "Kara delik",
             aciklama = "blackniga",
             aktiflik = true,
-            kalanAdet = 3,
+            
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -92,7 +92,7 @@ public class KartMek : MonoBehaviour
             ad = "Zamanı Hızlandır",
             aciklama = "Ben hızım",
             aktiflik = true,
-            kalanAdet = 3,
+            
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -109,7 +109,7 @@ public class KartMek : MonoBehaviour
             ad = "Yavaşlat",
             aciklama = "Ben hız değilim",
             aktiflik = true,
-            kalanAdet = 3,
+           
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -126,7 +126,7 @@ public class KartMek : MonoBehaviour
             ad = "Ok yavaslat",
             aciklama = "Ben hız değilim",
             aktiflik = true,
-            kalanAdet = 3,
+            
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -143,7 +143,7 @@ public class KartMek : MonoBehaviour
             ad = " Ok Hizlandir",
             aciklama = "Ben hız değilim",
             aktiflik = true,
-            kalanAdet = 3,
+            
             olasilik = 0.5f,
             minLevel = 1,
             maxLevel = 21,
@@ -161,7 +161,7 @@ public class KartMek : MonoBehaviour
     {
         DisplayCards();
     }
-    private void LateUpdate()
+    private void Update()
     {
         if (aktifKartlar.Count == 0) { DisplayCards(); }
     }
@@ -225,7 +225,7 @@ public class KartMek : MonoBehaviour
 
         foreach (Kart kart in kartListesi)
         {
-            if (kart.aktiflik && kart.kalanAdet > 0 && !kullanilanIndexler.Contains(kart.indeks))
+            if (kart.aktiflik&& !kullanilanIndexler.Contains(kart.indeks))
             {
                 kullanilabilirKartlar.Add(kart);
             }
@@ -339,7 +339,11 @@ public class KartMek : MonoBehaviour
             {
                 kart.aktiflik = false;
             }
-            scientist.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            foreach(GameObject sci in scientist)
+            {
+                sci.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            }
+            
             Debug.Log(saptir);
             // Start the coroutine to handle the saptir bool
             StartCoroutine(SetForSeconds(saptir, 3f, kart));
@@ -409,12 +413,27 @@ public class KartMek : MonoBehaviour
         saptir = false;
         if (kart.ad == "RADYASYON")
         {
-            priest.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
+            foreach(GameObject pri in priest)
+            {
+                pri.GetComponent<PapazArrowSpawner>().isMarieCurieModeActive = saptir;
+            }
+            
         }
         else if (kart.ad == "Ok saptır")
-            scientist.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+        {
+           foreach(GameObject sci in scientist)
+            {
+                sci.GetComponent<ScientistArrowSpawner>().isSpaceMode = saptir;
+            }
+            
+        }
+            
         else
-            priest.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
+            foreach(GameObject pri in priest)
+            {
+                pri.GetComponent<PapazArrowSpawner>().isHawkingModeActive = saptir;
+            }
+            
         Debug.Log("saptir set to false");
     }
 

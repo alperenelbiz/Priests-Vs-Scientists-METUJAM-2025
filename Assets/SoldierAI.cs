@@ -18,6 +18,7 @@ public class SoldierAI : MonoBehaviour
 
     public GameObject projectilePrefab; // Ranged askerlerin attýðý ok prefabý
     public Transform firePoint; // Okun fýrlatýlacaðý nokta
+    public float projectileSpeed = 15f; // Ok hýzý ayarlanabilir
 
     private NavMeshAgent agent;
     private Transform currentEnemy;
@@ -138,11 +139,10 @@ public class SoldierAI : MonoBehaviour
             Rigidbody rb = projectile.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                Vector3 direction = (currentEnemy.position - firePoint.position).normalized;
-                rb.velocity = direction * 10f;
                 Projectile projectileScript = projectile.AddComponent<Projectile>();
                 projectileScript.SetDamage(damage);
                 projectileScript.SetFaction(soldierFaction);
+                projectileScript.Launch(currentEnemy.position, projectileSpeed);
                 Debug.Log(name + " fired a projectile at " + currentEnemy.name);
             }
         }
@@ -173,22 +173,16 @@ public class SoldierAI : MonoBehaviour
     }
 }
 
-
 public class Projectile : MonoBehaviour
 {
     private int damage;
     private SoldierAI.SoldierFaction shooterFaction;
-    public float speed = 10f;
-    public float lifeTime = 5f;
-
-    private Rigidbody rb;
-
-    void Start()
-    {
-        rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * speed;
-        Destroy(gameObject, lifeTime);
-    }
+    public float speed = 15f;
+    public float lifeTime = 3f;
+    public float arcHeight = 2f;
+    private Vector3 targetPosition;
+    private float startTime;
+    private Vector3 startPos;
 
     public void SetDamage(int dmg)
     {
@@ -198,6 +192,30 @@ public class Projectile : MonoBehaviour
     public void SetFaction(SoldierAI.SoldierFaction faction)
     {
         shooterFaction = faction;
+    }
+
+    public void Launch(Vector3 target, float projectileSpeed)
+    {
+        targetPosition = target;
+        startTime = Time.time;
+        startPos = transform.position;
+        speed = projectileSpeed;
+    }
+
+    void Update()
+    {
+        float timeSinceStarted = Time.time - startTime;
+        float journeyFraction = timeSinceStarted / (lifeTime / speed);
+
+        if (journeyFraction >= 1f)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        Vector3 nextPos = Vector3.Lerp(startPos, targetPosition, journeyFraction);
+        nextPos.y += Mathf.Sin(journeyFraction * Mathf.PI) * arcHeight;
+        transform.position = nextPos;
     }
 
     void OnTriggerEnter(Collider other)
