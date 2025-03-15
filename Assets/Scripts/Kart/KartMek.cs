@@ -29,6 +29,7 @@ public class KartMek : MonoBehaviour
     public Currency currency;
     //public GameObject playerSoldier;
     //public GameObject enemySoldier;
+    public float blackHoleDuration = 3f;
     void Awake()
     {
 
@@ -79,7 +80,7 @@ public class KartMek : MonoBehaviour
             minLevel = 1,
             maxLevel = 21,
 
-            cost = 2,
+            cost = 5,
             OnDestroy = (kart) => karaDelik(kart.ad, true),
             gorsel = kartImageList.FirstOrDefault(x => x.name == ("karadelik"))
 
@@ -453,38 +454,37 @@ public class KartMek : MonoBehaviour
         Kart kart = kartListesi.FirstOrDefault(x => x.ad == name);
         if (kart != null)
         {
-            Debug.Log(kart.ad + " seçildi");
+            Debug.Log($"🎴 Kara Delik Kartı Kullanıldı: {kart.ad}");
 
-            // **SADECE "Scientist" TAG'İNE SAHİP ASKERLERİ BUL VE "Hawking Mode" AKTİF ET**
+            // **Sadece "Papaz" Tag'ine Sahip Askerleri Bul ve "Hawking Mode" Başlat**
             SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
             foreach (SoldierAI soldier in allSoldiers)
             {
                 if (soldier.CompareTag("Papaz"))
                 {
-                    soldier.ActivateHawkingMode(); // 🌀 **Hawking Mode Açılıyor**
-                    Debug.Log(soldier.name + " için Hawking Mode AKTİF (Sadece Scientist)");
+                    soldier.ActivateHawkingMode(); // 🌀 Hawking Mode Aç
+                    Debug.Log($"🌌 {soldier.name} için Hawking Mode AKTİF!");
                 }
             }
 
-            // **Belirli süre sonra tekrar kapat**
-            StartCoroutine(DisableHawkingModeAfter(3f)); // 3 saniye sonra kapat
+            // **Belirli süre sonra kapat**
+            StartCoroutine(DisableHawkingModeAfter(blackHoleDuration));
             currency.SpendCurrency(kart.cost);
             aktifKartlar.Remove(kart);
         }
-
     }
     IEnumerator DisableHawkingModeAfter(float duration)
     {
         yield return new WaitForSeconds(duration);
 
-        // **Sahnede olan tüm "Scientist" askerleri bul ve "Hawking Mode" kapat**
+        // **Sahnede olan tüm "Papaz" askerleri bul ve "Hawking Mode" kapat**
         SoldierAI[] allSoldiers = FindObjectsOfType<SoldierAI>();
         foreach (SoldierAI soldier in allSoldiers)
         {
             if (soldier.CompareTag("Papaz"))
             {
-                soldier.DeactivateHawkingMode(); // ❌ **Hawking Mode Kapatılıyor**
-                Debug.Log($"🛑 {soldier.name} için Hawking Mode KAPANDI");
+                soldier.DeactivateHawkingMode(); // ❌ Hawking Mode Kapat
+                Debug.Log($"🛑 {soldier.name} için Hawking Mode KAPANDI.");
             }
         }
     }

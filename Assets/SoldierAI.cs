@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -36,7 +37,11 @@ public class SoldierAI : MonoBehaviour
 
     private float speedMultiplier = 1f;
     public float soldierSpeed;
+    public static GameObject BlackHoleInstance; // Tek bir Black Hole olacak
+    public GameObject blackHolePrefab;
+    public Transform blackHoleSpawnPoint; // Karadeliğin çıkacağı yer
     public bool isHawkingModeActive = false;
+
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
@@ -46,6 +51,11 @@ public class SoldierAI : MonoBehaviour
         if (soldierType == SoldierType.Ranged)
         {
             StartCoroutine(FireArrows());
+        }
+        if (BlackHoleInstance == null && blackHolePrefab != null)
+        {
+            BlackHoleInstance = Instantiate(blackHolePrefab);
+            BlackHoleInstance.SetActive(false);
         }
     }
 
@@ -247,14 +257,39 @@ public class SoldierAI : MonoBehaviour
     }
     public void ActivateMarieCurieMode()
     {
-        isMarieCurieModeActive = true;
-        radiationEffect.ActivateRadiation(); // Par�ac�klar� ba�lat
-        //StartCoroutine(HealOverTime());
+        if (CompareTag("Papaz")) // ☢️ Sadece "Papaz" olan askerler etkilenecek
+        {
+            isMarieCurieModeActive = true;
+            radiationEffect.ActivateRadiation(); // Görsel efekti başlat
+
+            StartCoroutine(HealOverTime(2f, 5)); // 2 saniye boyunca, saniyede 5 can artışı
+            Debug.Log($"{name} Marie Curie Mode'a girdi! ☢️");
+        }
     }
-   public void DeactivateMarieCurieMode()
+
+    // **Belirtilen süre boyunca can yenileme efekti**
+    IEnumerator HealOverTime(float duration, int healPerSecond)
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < duration)
+        {
+            health += healPerSecond; // Her saniye 5 can arttır
+            Debug.Log($"{name} can kazandı! Yeni Can: {health}");
+
+            elapsedTime += 1f; // 1 saniye bekle
+            yield return new WaitForSeconds(1f);
+        }
+
+        DeactivateMarieCurieMode(); // Süre bitince modu kapat
+    }
+
+    public void DeactivateMarieCurieMode()
     {
         isMarieCurieModeActive = false;
-        radiationEffect.DeactivateRadiation(); // Par�ac�klar� durdur
+        radiationEffect.DeactivateRadiation(); // Görsel efekti kapat
+
+        Debug.Log($"{name} Marie Curie Mode'dan çıktı! ☢️");
     }
 
 
@@ -307,15 +342,58 @@ public class SoldierAI : MonoBehaviour
     public void ActivateHawkingMode()
     {
         isHawkingModeActive = true;
-        // Burada özel efektler / hız değişikliği ekleyebilirsin.
-        Debug.Log(name + " Hawking Mode'a girdi! 🌀");
+        Debug.Log($"{name} Hawking Mode'a girdi! 🌀");
+
+        // **Papazlar kendini klonlasın**
+        if (CompareTag("Papaz"))
+        {
+            CloneSelf();
+        }
+
+        // **Black Hole belirlenen noktada açılacak**
+        if (BlackHoleInstance != null && blackHoleSpawnPoint != null)
+        {
+            BlackHoleInstance.transform.position = blackHoleSpawnPoint.position;
+            BlackHoleInstance.SetActive(true);
+            Debug.Log($"🌌 Black Hole aktif edildi! Pozisyon: {BlackHoleInstance.transform.position}");
+        }
+
+        // **1 saniye sonra Black Hole'u gizle**
+        StartCoroutine(HideBlackHoleAfter(1f));
+    }
+
+    GameObject CloneSelf()
+    {
+        Vector3 randomOffset = new Vector3(Random.Range(-2f, 2f), 0, Random.Range(-2f, 2f));
+        GameObject clone = Instantiate(gameObject, transform.position + randomOffset, Quaternion.identity);
+        clone.name = gameObject.name + "_Clone";
+        Debug.Log($"{gameObject.name} klonlandı! 🌀");
+
+        return clone;
+    }
+
+    IEnumerator HideBlackHoleAfter(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        if (BlackHoleInstance != null)
+        {
+            BlackHoleInstance.SetActive(false);
+            Debug.Log("🌌 Black Hole gizlendi!");
+        }
     }
 
     public void DeactivateHawkingMode()
     {
         isHawkingModeActive = false;
-        Debug.Log(name + " Hawking Mode'dan çıktı! 🛑");
+        Debug.Log($"{name} Hawking Mode'dan çıktı! 🛑");
+
+        if (BlackHoleInstance != null)
+        {
+            BlackHoleInstance.SetActive(false);
+        }
     }
+
 
     void Die()
     {
